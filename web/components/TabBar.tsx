@@ -16,6 +16,7 @@ const TABS: { href: string; label: string; icon: IconName }[] = [
 export function TabBar() {
   const pathname = usePathname();
   const isActive = (href: string) => (href === "/" ? pathname === "/" : pathname.startsWith(href));
+  if (pathname.startsWith("/onboarding")) return null; // setup is a focused flow with its own footer
   return (
     <nav className="tabbar" aria-label="Main">
       <div className="pu-tabs">

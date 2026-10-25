@@ -11,6 +11,7 @@
 .pu-btn-sm { height: 36px; font-size: 14px; padding: 0 var(--space-4); }
 .pu-btn-block { display: flex; width: 100%; }
 .pu-btn-primary { background: var(--press-yellow); color: var(--on-yellow); }
+.pu-btn-primary:disabled { background: var(--surface-raised); color: var(--ink-muted); opacity: 1; }
 .pu-btn-secondary { border-color: var(--line-strong); color: var(--ink); }
 .pu-btn-ghost { color: var(--accent); padding: 0 var(--space-3); }
 .pu-btn svg { width: 20px; height: 20px; }

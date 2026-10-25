@@ -123,13 +123,14 @@ export function Tagline({ words, size }: { words: string[]; size?: string }) {
 }
 
 /** One exercise in a workout or programme list. */
-export function ExerciseCard({ index, name, detail, muscles, status }: { index: number; name: string; detail?: string; muscles?: string[]; status?: "done" | "pr" | "missed" }) {
+export function ExerciseCard({ index, name, detail, cue, muscles, status }: { index: number; name: string; detail?: string; cue?: string; muscles?: string[]; status?: "done" | "pr" | "missed" }) {
   return (
     <div className="pu-ex">
       <span className="pu-ex-index" aria-hidden="true">{index < 10 ? `0${index}` : index}</span>
       <span className="pu-ex-body">
         <span className="pu-ex-name">{name}</span>
         {detail ? <span className="pu-ex-detail">{detail}</span> : null}
+        {cue ? <span className="pu-ex-detail">{cue}</span> : null}
         {muscles?.length ? (
           <span className="pu-ex-tags">
             {muscles.map((m) => (

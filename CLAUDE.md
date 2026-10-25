@@ -12,7 +12,12 @@ This repository holds the brand and design system (`design/`) and the mobile-fir
   - `app/styles/tokens.css`: copy of the design-system tokens, with the font stacks pointed at the `next/font` variables. `app/styles/components.css`: port of the design system's `bundle.css`. Keep both in step with `design/brand/design-system/`.
   - `app/globals.css`: app shell (a 480px phone column, the fixed tab bar, sheets) and screen layout classes.
   - `components/ui/`: the design-system components as typed React modules (`Icon.tsx`, `primitives.tsx`). `components/TabBar.tsx` is the five-section nav: Today, Plan, Progress, Exercises, Profile.
-  - `lib/training.ts`: training types (`Session`, `Prescription` with a `role` of main, secondary or accessory) and `estimateMinutes`. `lib/sample-plan.ts`: the sample four-day week used until onboarding exists.
+  - `lib/training.ts`: training types (`Session`, `Prescription` with a `role` of main, secondary or accessory; `WeekPlan` with its `notes`) and the duration estimates.
+  - `lib/profile.ts`: the profile onboarding collects, every answer's options and labels, and per-step validation.
+  - `lib/exercises.ts`: the exercise catalogue the engine picks from (pattern, kits, level, joint stress). Milestone 3 extends it into the library.
+  - `lib/engine/plan.ts`: `generatePlan(profile)`, the rules that turn a profile into a week (session mix, split, exercise choice, recovery-aware day placement, notes). `lib/engine/fit.ts`: `fitToTime`, which trims a session to a time limit without dropping main lifts; milestone 4's shortened workouts reuse it. Tests sit beside them; run `npm test` in `web/`.
+  - `lib/store.ts`: profile and plan in localStorage (`pressup.v1`), read with `useStored()` (returns `"loading"` during prerender). `saveProfile` always regenerates the plan.
+  - `components/onboarding/`: the flow, and step editors that Profile reuses for edits.
   - User data lives on the device until milestone 8, so screens that read it are client components. `lib/use-today.ts` reads the date on the client; with Cache Components, never read `new Date()` during prerender.
 - `design/`: brand source and design system.
   - `design/assets/`: the original material from the brand owner. Six poster PNGs (`IMG_2195`–`IMG_2200`) and `Group-PDF-Export.pdf` (the logo: page 1 wordmark, page 2 P mark; a 300 dpi raster inside a PDF, not vectors).

@@ -6,7 +6,8 @@ The core idea from the brief: **your plan adapts to your life, not the other way
 
 ## Status
 
-- **Milestone 1 (Foundation):** built and passing `npm run build` and lint; not yet deployed. Today runs on a sample plan, Start workout opens a preview of the session, and the Adapt sheet shows the options without the engine behind them yet.
+- **Milestone 1 (Foundation):** done (`main`, 638b178).
+- **Milestone 2 (Onboarding and first plan):** built on the `milestone-2` branch. Six-step onboarding (goals, experience, week, setup, likes and limits, starting point), a rules-based plan engine with tests (`npm test`), the week on the Plan tab with reasons, and editable settings on Profile that rebuild the plan. Exercise likes and dislikes are picked from the library in milestone 3.
 
 ## Milestones
 
