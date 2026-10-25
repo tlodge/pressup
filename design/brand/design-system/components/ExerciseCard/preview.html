@@ -1,0 +1,12 @@
+<!-- @dsCard group="Workout" height=270 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>ExerciseCard</title></head>
+<body>
+<div id="root" class="pu-row"></div>
+<script>
+  var P = window.PressUp, h = React.createElement;
+  ReactDOM.createRoot(document.getElementById('root')).render(h('div', { style: { display: 'grid', gap: 8, width: '100%' } }, h(P.ExerciseCard, { index: 1, name: 'Barbell bench press', detail: '4 × 8 · 82.5 kg', muscles: ['Chest', 'Triceps'], status: 'pr' }), h(P.ExerciseCard, { index: 2, name: 'Seated cable row', detail: '3 × 10 · 55 kg', muscles: ['Back', 'Biceps'], status: 'done' }), h(P.ExerciseCard, { index: 3, name: 'Overhead press', detail: '3 × 8 · 45 kg', muscles: ['Shoulders'] })));
+</script>
+</body>
+</html>

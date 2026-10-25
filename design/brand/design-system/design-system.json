@@ -1,0 +1,188 @@
+{
+  "v": 3,
+  "layout": "files",
+  "createdOnFiles": {
+    "v": 1,
+    "at": "2026-10-25T16:14:40Z"
+  },
+  "title": "PressUp",
+  "namespace": "PressUp",
+  "libraries": [
+    {
+      "name": "react",
+      "version": "18"
+    },
+    {
+      "name": "react-dom",
+      "version": "18"
+    }
+  ],
+  "sections": {},
+  "groups": [
+    "Logos",
+    "Graphics",
+    "Imagery"
+  ],
+  "assetGroups": {
+    "Logos": {
+      "name": "Logos",
+      "tile": "l",
+      "order": [
+        "pressup-wordmark-on-dark.png",
+        "pressup-wordmark-on-light.png",
+        "pressup-wordmark-mono-white.png",
+        "pressup-wordmark-mono-black.png",
+        "pressup-mark-on-dark.png",
+        "pressup-mark-on-light.png",
+        "pressup-mark-mono-white.png",
+        "pressup-mark-mono-black.png"
+      ],
+      "files": {
+        "pressup-wordmark-on-dark.png": {
+          "name": "pressup-wordmark-on-dark.png",
+          "blob": "b18f8c0b3a4548c7192993e2206a1329",
+          "size": 101725,
+          "type": "image/png"
+        },
+        "pressup-wordmark-on-light.png": {
+          "name": "pressup-wordmark-on-light.png",
+          "blob": "667dbfd91d3322c993041765e73bfebd",
+          "size": 123993,
+          "type": "image/png"
+        },
+        "pressup-wordmark-mono-white.png": {
+          "name": "pressup-wordmark-mono-white.png",
+          "blob": "9beeda69717d9ac7a33c315199482e1f",
+          "size": 94813,
+          "type": "image/png"
+        },
+        "pressup-wordmark-mono-black.png": {
+          "name": "pressup-wordmark-mono-black.png",
+          "blob": "9bb56876d52561b49c90836f99ec1582",
+          "size": 121347,
+          "type": "image/png"
+        },
+        "pressup-mark-on-dark.png": {
+          "name": "pressup-mark-on-dark.png",
+          "blob": "84aa1feeac82b08e7ce2d5e0eb33387b",
+          "size": 66859,
+          "type": "image/png"
+        },
+        "pressup-mark-on-light.png": {
+          "name": "pressup-mark-on-light.png",
+          "blob": "2a5dd2a5fc5c77c7b42249c156b26570",
+          "size": 70720,
+          "type": "image/png"
+        },
+        "pressup-mark-mono-white.png": {
+          "name": "pressup-mark-mono-white.png",
+          "blob": "51e550d888783a4c3a26d6c4fdf1c468",
+          "size": 49948,
+          "type": "image/png"
+        },
+        "pressup-mark-mono-black.png": {
+          "name": "pressup-mark-mono-black.png",
+          "blob": "abcdd13e76692235b47fdcf1813f71f7",
+          "size": 64032,
+          "type": "image/png"
+        }
+      }
+    },
+    "Graphics": {
+      "name": "Graphics",
+      "tile": "l",
+      "order": [
+        "pressup-figures-yellow.png",
+        "pressup-figures-black.png",
+        "pressup-figures-white.png"
+      ],
+      "files": {
+        "pressup-figures-yellow.png": {
+          "name": "pressup-figures-yellow.png",
+          "blob": "640ce0fa60949dbffbb7c3ef8b825ea4",
+          "size": 72769,
+          "type": "image/png"
+        },
+        "pressup-figures-black.png": {
+          "name": "pressup-figures-black.png",
+          "blob": "2b9eb951f1a7a19eb8fa5aee74af7a45",
+          "size": 73240,
+          "type": "image/png"
+        },
+        "pressup-figures-white.png": {
+          "name": "pressup-figures-white.png",
+          "blob": "71a4c15209f77ddb1dd516f78e0f2cba",
+          "size": 72596,
+          "type": "image/png"
+        }
+      }
+    },
+    "Imagery": {
+      "name": "Imagery",
+      "tile": "m",
+      "order": [
+        "take-the-first-step.jpg",
+        "discipline.jpg",
+        "locked-in.jpg",
+        "focus.jpg",
+        "photo-shoulder.jpg",
+        "photo-row.jpg",
+        "photo-row-wide.jpg"
+      ],
+      "files": {
+        "take-the-first-step.jpg": {
+          "name": "take-the-first-step.jpg",
+          "blob": "f55b5f9da44559a79b408e2c16c6a96f",
+          "size": 81966,
+          "type": "image/jpeg"
+        },
+        "discipline.jpg": {
+          "name": "discipline.jpg",
+          "blob": "3642992d40667690be25256f1a86c24e",
+          "size": 46334,
+          "type": "image/jpeg"
+        },
+        "locked-in.jpg": {
+          "name": "locked-in.jpg",
+          "blob": "9a6aab1eede1ef41367a784527749de8",
+          "size": 68310,
+          "type": "image/jpeg"
+        },
+        "focus.jpg": {
+          "name": "focus.jpg",
+          "blob": "06b4fba3753f2baa7fd98e50ebd874bc",
+          "size": 40242,
+          "type": "image/jpeg"
+        },
+        "photo-shoulder.jpg": {
+          "name": "photo-shoulder.jpg",
+          "blob": "7fd9512839c7144bebdb5dce1dc8b6b2",
+          "size": 125800,
+          "type": "image/jpeg"
+        },
+        "photo-row.jpg": {
+          "name": "photo-row.jpg",
+          "blob": "1faa9576b23579c7e56fa8add773258f",
+          "size": 26363,
+          "type": "image/jpeg"
+        },
+        "photo-row-wide.jpg": {
+          "name": "photo-row-wide.jpg",
+          "blob": "1827c7b127671a1b3312453b13a497e5",
+          "size": 36778,
+          "type": "image/jpeg"
+        }
+      }
+    }
+  },
+  "blobs": {},
+  "docs": {
+    "sections": []
+  },
+  "lastChange": {
+    "by": "Tom Lodge",
+    "at": "2026-10-25T16:14:40Z",
+    "via": "Claude Code",
+    "note": "Recreated in this account: tokens, brand book, 16 components, 3 example screens, logo, graphics and imagery."
+  }
+}

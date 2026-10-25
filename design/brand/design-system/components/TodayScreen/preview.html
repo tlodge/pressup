@@ -1,0 +1,53 @@
+<!-- @dsCard group="Examples" height=880 width=390 page subtitle="App · Today" -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Today screen</title>
+<style>
+  .scr { width: 390px; max-width: 100%; margin: 0 auto; min-height: 844px; background: var(--surface); position: relative; padding: var(--space-5) var(--space-5) 120px; box-sizing: border-box; display: flex; flex-direction: column; gap: var(--space-6); }
+  .top { display: flex; justify-content: space-between; align-items: center; }
+  .top img { height: 22px; }
+  .lt { display: none; }
+  [data-theme="light"] .dk { display: none; }
+  [data-theme="light"] .lt { display: block; }
+  .eyebrow { font-family: var(--font-condensed); font-weight: 600; font-size: 13px; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-muted); margin: 0 0 var(--space-1); }
+  .h1 { font-family: var(--font-display); font-size: 40px; line-height: .95; text-transform: uppercase; margin: 0; color: var(--ink); }
+  .week { display: flex; gap: var(--space-4); align-items: center; background: var(--surface-raised); border-radius: var(--radius-md); padding: var(--space-4); }
+  .week p { margin: 0; font-size: 14px; line-height: 20px; color: var(--ink-muted); }
+  .week strong { display: block; font-size: 18px; line-height: 24px; font-weight: 500; color: var(--ink); margin-bottom: 2px; }
+  .list { display: flex; flex-direction: column; gap: var(--space-2); }
+  .sec { display: flex; justify-content: space-between; align-items: baseline; }
+  .tabs { position: absolute; left: var(--space-4); right: var(--space-4); bottom: var(--space-4); }
+  .cta { margin-top: auto; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+  var P = window.PressUp, h = React.createElement;
+  function App() {
+    return h('div', { className: 'scr' },
+      h('div', { className: 'top' },
+        h('img', { className: 'dk', src: '../../assets/Logos/pressup-wordmark-on-dark.png', alt: 'PressUp' }),
+        h('img', { className: 'lt', src: '../../assets/Logos/pressup-wordmark-on-light.png', alt: 'PressUp' }),
+        h(P.Badge, { tone: 'neutral' }, 'Week 3 of 8')),
+      h('div', null,
+        h('p', { className: 'eyebrow' }, 'Tuesday 27 October · Session 2'),
+        h('h1', { className: 'h1' }, 'Push day A')),
+      h('div', { className: 'week' },
+        h(P.ProgressRing, { value: 0.5, size: 84, stroke: 8, label: '2 / 4' }, h('span', { className: 'pu-ring-value' }, '50%')),
+        h('p', null, h('strong', null, 'Halfway through the week'), 'Two sessions done. Today keeps your streak at 9 days.')),
+      h('div', { style: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 } },
+        h(P.StatTile, { label: 'Est. time', value: '52', unit: 'min' }),
+        h(P.StatTile, { label: 'Bench 1RM', value: '102.5', unit: 'kg', delta: '+2.5 kg', highlight: true })),
+      h('div', { className: 'list' },
+        h('div', { className: 'sec' }, h('p', { className: 'eyebrow' }, '5 exercises'), h(P.Button, { variant: 'ghost', size: 'sm' }, 'Edit')),
+        h(P.ExerciseCard, { index: 1, name: 'Barbell bench press', detail: '4 × 8 · 82.5 kg', muscles: ['Chest', 'Triceps'] }),
+        h(P.ExerciseCard, { index: 2, name: 'Incline dumbbell press', detail: '3 × 10 · 26 kg', muscles: ['Chest', 'Shoulders'] }),
+        h(P.ExerciseCard, { index: 3, name: 'Overhead press', detail: '3 × 8 · 45 kg', muscles: ['Shoulders'] })),
+      h('div', { className: 'cta' }, h(P.Button, { variant: 'primary', size: 'lg', block: true, icon: 'play' }, 'Start workout')),
+      h('div', { className: 'tabs' }, h(P.TabBar, { active: 'today' })));
+  }
+  ReactDOM.createRoot(document.getElementById('root')).render(h(App));
+</script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+<!-- @dsCard group="Actions" height=96 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Button</title></head>
+<body>
+<div id="root" class="pu-row"></div>
+<script>
+  var P = window.PressUp, h = React.createElement;
+  ReactDOM.createRoot(document.getElementById('root')).render(h(React.Fragment, null, h(P.Button, { variant: 'primary', icon: 'play' }, 'Start workout'), h(P.Button, { variant: 'secondary' }, 'Swap exercise'), h(P.Button, { variant: 'ghost' }, 'Skip'), h(P.Button, { variant: 'primary', size: 'sm' }, 'Log set')));
+</script>
+</body>
+</html>

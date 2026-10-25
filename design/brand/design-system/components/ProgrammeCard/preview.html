@@ -1,0 +1,12 @@
+<!-- @dsCard group="Content" height=520 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>ProgrammeCard</title></head>
+<body>
+<div id="root" class="pu-row"></div>
+<script>
+  var P = window.PressUp, h = React.createElement;
+  ReactDOM.createRoot(document.getElementById('root')).render(h('div', { style: { display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 16, width: '100%' } }, h(P.ProgrammeCard, { title: 'Discipline', image: '../../assets/Imagery/photo-row.jpg', weeks: 8, perWeek: 4, level: 'Intermediate', description: 'Four sessions a week. Build the habit, then the numbers.' }), h(P.ProgrammeCard, { title: 'First step', image: '../../assets/Imagery/photo-shoulder.jpg', weeks: 4, perWeek: 3, level: 'Beginner', description: 'Three full-body sessions a week. No experience needed.' })));
+</script>
+</body>
+</html>

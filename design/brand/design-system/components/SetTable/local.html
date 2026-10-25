@@ -1,0 +1,19 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<script>function puTheme(){document.documentElement.setAttribute('data-theme', location.hash.slice(1) === 'light' ? 'light' : 'dark');} puTheme(); window.addEventListener('hashchange', puTheme);</script>
+<link rel="stylesheet" href="../../tokens.css">
+<link rel="stylesheet" href="../bundle.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
+<script src="../bundle.js"></script>
+<meta charset="utf-8"><title>SetTable</title></head>
+<body>
+<div id="root" class="pu-row"></div>
+<script>
+  var P = window.PressUp, h = React.createElement;
+  ReactDOM.createRoot(document.getElementById('root')).render(h('div', { style: { width: '100%' } }, h(P.SetTable, { sets: [ { prev: '80 × 8', weight: 80, reps: 8, done: true }, { prev: '80 × 8', weight: 82.5, reps: 8, done: true }, { prev: '80 × 7', weight: 82.5, reps: 7 }, { prev: '75 × 10', weight: 75, reps: 10 } ] })));
+</script>
+</body>
+</html>

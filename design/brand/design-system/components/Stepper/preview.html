@@ -1,0 +1,12 @@
+<!-- @dsCard group="Workout" height=96 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Stepper</title></head>
+<body>
+<div id="root" class="pu-row"></div>
+<script>
+  var P = window.PressUp, h = React.createElement;
+  ReactDOM.createRoot(document.getElementById('root')).render(h(React.Fragment, null, h(P.Stepper, { value: 80, step: 2.5, unit: 'kg' }), h(P.Stepper, { value: 8, step: 1, unit: 'reps' })));
+</script>
+</body>
+</html>

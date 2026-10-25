@@ -1,0 +1,12 @@
+<!-- @dsCard group="Data" height=170 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>ProgressRing</title></head>
+<body>
+<div id="root" class="pu-row"></div>
+<script>
+  var P = window.PressUp, h = React.createElement;
+  ReactDOM.createRoot(document.getElementById('root')).render(h(React.Fragment, null, h(P.ProgressRing, { value: 0.75, label: 'Week 3', size: 132 }), h(P.ProgressRing, { value: 0.4, size: 96 }), h(P.ProgressRing, { value: 1, size: 96, label: 'Done' })));
+</script>
+</body>
+</html>

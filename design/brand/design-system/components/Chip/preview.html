@@ -1,0 +1,12 @@
+<!-- @dsCard group="Actions" height=72 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Chip</title></head>
+<body>
+<div id="root" class="pu-row"></div>
+<script>
+  var P = window.PressUp, h = React.createElement;
+  ReactDOM.createRoot(document.getElementById('root')).render(h(React.Fragment, null, h(P.Chip, { selected: true }, 'Chest'), h(P.Chip, { selected: false }, 'Shoulders'), h(P.Chip, { selected: false }, 'Triceps'), h(P.Chip, null, 'Beginner')));
+</script>
+</body>
+</html>

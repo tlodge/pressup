@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PressUp Gallery</title>
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="components/bundle.css">
+<style>
+  body { padding: 32px max(16px, 4vw); }
+  header { display:flex; justify-content:space-between; align-items:center; gap:16px; margin-bottom:32px; }
+  header img { height: 28px; }
+  section { margin-bottom: 40px; }
+  h2 { font-family: var(--font-condensed); font-weight:700; letter-spacing:.06em; text-transform:uppercase; font-size:18px; margin:0 0 8px; }
+  h2 span { color: var(--ink-muted); font-weight:600; font-size:13px; letter-spacing:.12em; margin-left:8px; }
+  .frame { border:1px solid var(--line); border-radius: var(--radius-md); overflow:hidden; }
+  iframe { width:100%; border:0; display:block; background: var(--surface); }
+</style></head>
+<body>
+<header><img id="logo" src="assets/Logos/pressup-wordmark-on-dark.png" alt="PressUp"><button class="pu-btn pu-btn-secondary pu-btn-sm" id="theme">Switch to light</button></header>
+<section><h2>Cover <span>Cover</span></h2><div class="frame" style="max-width:1000px"><iframe data-src="components/Cover/local.html" style="height:312px" title="Cover"></iframe></div></section>
+<section><h2>BracketTitle <span>Brand</span></h2><div class="frame" style="max-width:1000px"><iframe data-src="components/BracketTitle/local.html" style="height:144px" title="BracketTitle"></iframe></div></section>
+<section><h2>EchoHeadline <span>Brand</span></h2><div class="frame" style="max-width:1000px"><iframe data-src="components/EchoHeadline/local.html" style="height:384px" title="EchoHeadline"></iframe></div></section>
+<section><h2>Rings <span>Brand</span></h2><div class="frame" style="max-width:1000px"><iframe data-src="components/Rings/local.html" style="height:264px" title="Rings"></iframe></div></section>
+<section><h2>Tagline <span>Brand</span></h2><div class="frame" style="max-width:1000px"><iframe data-src="components/Tagline/local.html" style="height:96px" title="Tagline"></iframe></div></section>
+<section><h2>Button <span>Actions</span></h2><div class="frame" style="max-width:1000px"><iframe data-src="components/Button/local.html" style="height:120px" title="Button"></iframe></div></section>
+<section><h2>Chip <span>Actions</span></h2><div class="frame" style="max-width:1000px"><iframe data-src="components/Chip/local.html" style="height:96px" title="Chip"></iframe></div></section>
+<section><h2>Badge <span>Status</span></h2><div class="frame" style="max-width:1000px"><iframe data-src="components/Badge/local.html" style="height:88px" title="Badge"></iframe></div></section>
+<section><h2>ProgressRing <span>Data</span></h2><div class="frame" style="max-width:1000px"><iframe data-src="components/ProgressRing/local.html" style="height:194px" title="ProgressRing"></iframe></div></section>
+<section><h2>StatTile <span>Data</span></h2><div class="frame" style="max-width:1000px"><iframe data-src="components/StatTile/local.html" style="height:174px" title="StatTile"></iframe></div></section>
+<section><h2>ExerciseCard <span>Workout</span></h2><div class="frame" style="max-width:1000px"><iframe data-src="components/ExerciseCard/local.html" style="height:294px" title="ExerciseCard"></iframe></div></section>
+<section><h2>RestTimer <span>Workout</span></h2><div class="frame" style="max-width:1000px"><iframe data-src="components/RestTimer/local.html" style="height:384px" title="RestTimer"></iframe></div></section>
+<section><h2>SetTable <span>Workout</span></h2><div class="frame" style="max-width:1000px"><iframe data-src="components/SetTable/local.html" style="height:284px" title="SetTable"></iframe></div></section>
+<section><h2>Stepper <span>Workout</span></h2><div class="frame" style="max-width:1000px"><iframe data-src="components/Stepper/local.html" style="height:120px" title="Stepper"></iframe></div></section>
+<section><h2>ProgrammeCard <span>Content</span></h2><div class="frame" style="max-width:1000px"><iframe data-src="components/ProgrammeCard/local.html" style="height:544px" title="ProgrammeCard"></iframe></div></section>
+<section><h2>TabBar <span>Navigation</span></h2><div class="frame" style="max-width:1000px"><iframe data-src="components/TabBar/local.html" style="height:128px" title="TabBar"></iframe></div></section>
+<section><h2>Icon <span>Foundations</span></h2><div class="frame" style="max-width:1000px"><iframe data-src="components/Icon/local.html" style="height:96px" title="Icon"></iframe></div></section>
+<section><h2>TodayScreen <span>Examples</span></h2><div class="frame" style="max-width:390px"><iframe data-src="components/TodayScreen/local.html" style="height:904px" title="TodayScreen"></iframe></div></section>
+<section><h2>WebHero <span>Examples</span></h2><div class="frame" style="max-width:1200px"><iframe data-src="components/WebHero/local.html" style="height:1204px" title="WebHero"></iframe></div></section>
+<section><h2>WorkoutScreen <span>Examples</span></h2><div class="frame" style="max-width:390px"><iframe data-src="components/WorkoutScreen/local.html" style="height:904px" title="WorkoutScreen"></iframe></div></section>
+<script>
+  var theme = 'dark';
+  function load() {
+    document.documentElement.setAttribute('data-theme', theme);
+    document.getElementById('logo').src = 'assets/Logos/pressup-wordmark-on-' + theme + '.png';
+    document.getElementById('theme').textContent = 'Switch to ' + (theme === 'dark' ? 'light' : 'dark');
+    document.querySelectorAll('iframe').forEach(function (f) { f.src = f.dataset.src + '#' + theme; });
+  }
+  document.getElementById('theme').onclick = function () { theme = theme === 'dark' ? 'light' : 'dark'; load(); };
+  load();
+</script>
+</body></html>

@@ -1,0 +1,101 @@
+/* PressUp — copied from design/brand/design-system/tokens.css (font stacks point at next/font variables) */
+
+:root, [data-theme="dark"] {
+  --surface: #0a0a0a;
+  --surface-raised: #161615;
+  --surface-sunken: #000000;
+  --line: #2c2b26;
+  --line-strong: #6b6858;
+  --ink: #fafaf7;
+  --ink-muted: #a6a496;
+  --press-yellow: #f5ec61;
+  --on-yellow: #0e0e0e;
+  --accent: var(--press-yellow);
+  --accent-soft: #2a2914;
+  --accent-highlight: rgba(245, 236, 97, 0);
+  --accent-line: var(--press-yellow);
+  --ring-track: var(--line);
+  --success: #4fd1c5;
+  --success-soft: #0f2b28;
+  --danger: #ff7a59;
+  --danger-soft: #331a12;
+  --focus-ring: var(--press-yellow);
+  --scrim: rgba(0, 0, 0, 0.55);
+  --shadow-float: 0 12px 32px rgba(0, 0, 0, 0.6);
+  color-scheme: dark;
+}
+
+[data-theme="light"] {
+  --surface: #fafaf6;
+  --surface-raised: #ffffff;
+  --surface-sunken: #f0efe7;
+  --line: #e2e0d4;
+  --line-strong: #8f8c7e;
+  --ink: #0e0e0e;
+  --ink-muted: #5c5a50;
+  --accent: #0e0e0e;
+  --accent-soft: var(--press-yellow);
+  --accent-highlight: var(--press-yellow);
+  --ring-track: #2c2b26;
+  --success: #0b7468;
+  --success-soft: #dff4f1;
+  --danger: #b23317;
+  --danger-soft: #fbe6df;
+  --focus-ring: #0e0e0e;
+  --scrim: rgba(0, 0, 0, 0.45);
+  --shadow-float: 0 12px 32px rgba(14, 14, 14, 0.12);
+  color-scheme: light;
+}
+
+:root {
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-16: 64px;
+  --space-24: 96px;
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 28px;
+  --radius-pill: 999px;
+  --stroke-hairline: 1px;
+  --stroke-icon: 2px;
+  --stroke-ring: 10px;
+  --echo-1: 1;
+  --echo-2: 0.7;
+  --echo-3: 0.5;
+  --echo-4: 0.32;
+  --echo-5: 0.18;
+  --ring-faint: 0.35;
+  --font-display: var(--font-anton), "Bebas Neue", Impact, "Arial Narrow", sans-serif;
+  --font-condensed: var(--font-barlow-condensed), "Arial Narrow", "Helvetica Neue", sans-serif;
+  --font-sans: var(--font-jost), Avenir, "Avenir Next", "Century Gothic", system-ui, sans-serif;
+}
+
+.display-xl { font-family: var(--font-display); font-size: 96px; line-height: 0.9; font-weight: 400; letter-spacing: -0.005em; }
+
+.display-l { font-family: var(--font-display); font-size: 64px; line-height: 0.92; font-weight: 400; }
+
+.display-m { font-family: var(--font-display); font-size: 40px; line-height: 0.95; font-weight: 400; }
+
+.heading { font-family: var(--font-display); font-size: 26px; line-height: 1.05; font-weight: 400; letter-spacing: 0.005em; }
+
+.stat-xl { font-family: var(--font-condensed); font-size: 72px; line-height: 1; font-weight: 700; }
+
+.stat { font-family: var(--font-condensed); font-size: 34px; line-height: 1; font-weight: 700; }
+
+.label { font-family: var(--font-condensed); font-size: 16px; line-height: 20px; font-weight: 700; letter-spacing: 0.06em; }
+
+.overline { font-family: var(--font-condensed); font-size: 13px; line-height: 16px; font-weight: 600; letter-spacing: 0.12em; }
+
+.title { font-family: var(--font-sans); font-size: 20px; line-height: 28px; font-weight: 500; }
+
+.body { font-family: var(--font-sans); font-size: 16px; line-height: 24px; font-weight: 400; }
+
+.body-sm { font-family: var(--font-sans); font-size: 14px; line-height: 20px; font-weight: 400; }
+
+.caption { font-family: var(--font-sans); font-size: 12px; line-height: 16px; font-weight: 400; letter-spacing: 0.01em; }

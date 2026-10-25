@@ -1,0 +1,12 @@
+<!-- @dsCard group="Data" height=150 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>StatTile</title></head>
+<body>
+<div id="root" class="pu-row"></div>
+<script>
+  var P = window.PressUp, h = React.createElement;
+  ReactDOM.createRoot(document.getElementById('root')).render(h('div', { style: { display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: 12, width: '100%' } }, h(P.StatTile, { label: 'Volume', value: '12,480', unit: 'kg', delta: '+8% vs last week' }), h(P.StatTile, { label: 'Bench 1RM', value: '102.5', unit: 'kg', delta: '+2.5 kg', highlight: true }), h(P.StatTile, { label: 'Sessions', value: '3', unit: '/ 4', delta: '-1 vs plan', trend: 'down' })));
+</script>
+</body>
+</html>

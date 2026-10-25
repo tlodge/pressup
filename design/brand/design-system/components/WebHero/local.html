@@ -1,0 +1,60 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<script>function puTheme(){document.documentElement.setAttribute('data-theme', location.hash.slice(1) === 'light' ? 'light' : 'dark');} puTheme(); window.addEventListener('hashchange', puTheme);</script>
+<link rel="stylesheet" href="../../tokens.css">
+<link rel="stylesheet" href="../bundle.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
+<script src="../bundle.js"></script>
+<meta charset="utf-8"><title>Website home</title>
+<style>
+  .web { width: 1200px; background: #0a0a0a; color: #fafaf7; }
+  .nav { display: flex; align-items: center; justify-content: space-between; padding: var(--space-6) var(--space-10); }
+  .nav img { height: 30px; display: block; }
+  .links { display: flex; gap: var(--space-8); align-items: center; font-family: var(--font-condensed); font-weight: 600; font-size: 15px; letter-spacing: .1em; text-transform: uppercase; }
+  .links a { color: #fafaf7; text-decoration: none; }
+  .hero { position: relative; display: grid; grid-template-columns: 1.1fr 1fr; gap: var(--space-10); padding: var(--space-16) var(--space-10) var(--space-24); overflow: hidden; }
+  .hero .pu-echo { font-size: 132px; color: #f5ec61; }
+  .copy { position: relative; z-index: 1; display: flex; flex-direction: column; gap: var(--space-8); }
+  .lede { font-size: 20px; line-height: 30px; color: #d9d8cf; max-width: 30ch; margin: 0; font-weight: 300; }
+  .ctas { display: flex; gap: var(--space-3); }
+  .ctas .pu-btn-secondary { color: #fafaf7; border-color: #6b6858; }
+  .photo { position: relative; border-radius: var(--radius-lg); overflow: hidden; aspect-ratio: 3 / 4; max-width: 100%; }
+  .photo img { width: 100%; height: 100%; object-fit: cover; display: block; filter: grayscale(1) contrast(1.1); }
+  .photo .pu-rings circle { stroke: #f5ec61; }
+  .strip { padding: 0 var(--space-10) var(--space-16); display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-6); }
+  .strip .pu-stat { background: #161615; }
+  .strip .pu-stat-value { color: #fafaf7; }
+  .foot { display: flex; justify-content: space-between; align-items: center; padding: var(--space-8) var(--space-10); border-top: 1px solid #2c2b26; }
+  .foot .pu-tagline { color: #fafaf7; }
+  .foot .pu-tagline-sep { border-color: #f5ec61; }
+  .foot img { height: 64px; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+  var P = window.PressUp, h = React.createElement;
+  function App() {
+    return h('div', { className: 'web' },
+      h('header', { className: 'nav' },
+        h('img', { src: '../../assets/Logos/pressup-wordmark-on-dark.png', alt: 'PressUp' }),
+        h('nav', { className: 'links' }, h('a', { href: '#' }, 'Programmes'), h('a', { href: '#' }, 'How it works'), h('a', { href: '#' }, 'Pricing'), h(P.Button, { variant: 'primary', size: 'sm' }, 'Get the app'))),
+      h('section', { className: 'hero' },
+        h('div', { className: 'copy' },
+          h(P.EchoHeadline, { text: 'First step.', lines: 4 }),
+          h('p', { className: 'lede' }, 'Plans that tell you exactly what to lift today, and a log that shows how far you have come.'),
+          h('div', { className: 'ctas' }, h(P.Button, { variant: 'primary', size: 'lg' }, 'Start free for 14 days'), h(P.Button, { variant: 'secondary', size: 'lg' }, 'See programmes'))),
+        h('div', { className: 'photo' }, h('img', { src: '../../assets/Imagery/photo-shoulder.jpg', alt: 'A woman in a racer-back top, arm outstretched, in a dark gym' }), h(P.Rings, { count: 3, size: 760, offset: '-10%, -20%' }))),
+      h('section', { className: 'strip' },
+        h(P.StatTile, { label: 'Guided programmes', value: '24' }),
+        h(P.StatTile, { label: 'Exercises with demos', value: '310' }),
+        h(P.StatTile, { label: 'Average session', value: '48', unit: 'min' })),
+      h('footer', { className: 'foot' }, h(P.Tagline, { size: '22px' }), h('img', { src: '../../assets/Graphics/pressup-figures-yellow.png', alt: '' })));
+  }
+  ReactDOM.createRoot(document.getElementById('root')).render(h(App));
+</script>
+</body>
+</html>

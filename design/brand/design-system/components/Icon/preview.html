@@ -1,0 +1,12 @@
+<!-- @dsCard group="Foundations" height=72 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Icon</title></head>
+<body>
+<div id="root" class="pu-row"></div>
+<script>
+  var P = window.PressUp, h = React.createElement;
+  ReactDOM.createRoot(document.getElementById('root')).render(h('div', { style: { display: 'flex', gap: 16, color: 'var(--ink)' } }, ['home','list','plus','chart','user','play','pause','check','x','timer','flame','dumbbell','arrow-up','chevron-right'].map(function (n) { return h(P.Icon, { key: n, name: n, title: n }); })));
+</script>
+</body>
+</html>
