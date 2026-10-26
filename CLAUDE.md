@@ -14,9 +14,11 @@ This repository holds the brand and design system (`design/`) and the mobile-fir
   - `components/ui/`: the design-system components as typed React modules (`Icon.tsx`, `primitives.tsx`). `components/TabBar.tsx` is the five-section nav: Today, Plan, Progress, Exercises, Profile.
   - `lib/training.ts`: training types (`Session`, `Prescription` with a `role` of main, secondary or accessory; `WeekPlan` with its `notes`) and the duration estimates.
   - `lib/profile.ts`: the profile onboarding collects, every answer's options and labels, and per-step validation.
-  - `lib/exercises.ts`: the exercise catalogue the engine picks from (pattern, kits, level, joint stress). Milestone 3 extends it into the library.
+  - `lib/exercises.ts`: the exercise catalogue (pattern, kits, level, joint stress, body area). `lib/exercise-guide.ts`: how-to steps, cues and easier/harder variations for each, awaiting coach review. A test fails if an exercise has no guide or a variation points at a missing id.
+  - `lib/engine/eligibility.ts`: `blocker(exercise, profile)`, the single check for kit, avoided areas, exclusions and level. Plan generation and swaps both use it. `lib/engine/substitute.ts`: `findSwaps`, swaps from the same or a related movement pattern only, ranked by shared muscles.
   - `lib/engine/plan.ts`: `generatePlan(profile)`, the rules that turn a profile into a week (session mix, split, exercise choice, recovery-aware day placement, notes). `lib/engine/fit.ts`: `fitToTime`, which trims a session to a time limit without dropping main lifts; milestone 4's shortened workouts reuse it. Tests sit beside them; run `npm test` in `web/`.
-  - `lib/store.ts`: profile and plan in localStorage (`pressup.v1`), read with `useStored()` (returns `"loading"` during prerender). `saveProfile` always regenerates the plan.
+  - `lib/store.ts`: profile and plan in localStorage (`pressup.v1`), read with `useStored()` (returns `"loading"` during prerender). `saveProfile`, `toggleFavourite` and `toggleExcluded` regenerate the plan; `savePlan` stores an edited plan (swaps) as is.
+  - `components/Sheet.tsx`: the bottom sheet on `<dialog>`; `AdaptSheet` and `SwapSheet` use it.
   - `components/onboarding/`: the flow, and step editors that Profile reuses for edits.
   - User data lives on the device until milestone 8, so screens that read it are client components. `lib/use-today.ts` reads the date on the client; with Cache Components, never read `new Date()` during prerender.
 - `design/`: brand source and design system.

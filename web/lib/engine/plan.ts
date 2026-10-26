@@ -5,9 +5,10 @@
    4. Place sessions on the chosen days so hard leg days and hard runs don't land back to back.
    5. Fit every session to the user's time per session.
    Every step is deterministic, so the same profile always gives the same plan. */
-import { EXERCISES, HOLD_EXERCISES, hasKit, isBodyweight, type Exercise, type Pattern } from "../exercises";
+import { EXERCISES, HOLD_EXERCISES, isBodyweight, type Exercise, type Pattern } from "../exercises";
 import { BODY_AREAS, isRunGoal, labelOf, type Goal, type Profile } from "../profile";
 import { WEEKDAY_SHORT, type Focus, type Prescription, type Role, type Session, type WeekPlan, type Weekday } from "../training";
+import { blocker } from "./eligibility";
 import { fitToTime } from "./fit";
 
 type Slot = { pattern: Pattern; role: Role; alt?: Pattern[] };
@@ -71,7 +72,6 @@ const UNILATERAL = new Set(["bulgarian-split-squat", "walking-lunge", "reverse-l
 type PickContext = {
   profile: Profile;
   primary: Goal;
-  maxLevel: number;
   sessionUsed: Set<string>;
   weekUsed: Map<string, number>;
 };
@@ -84,12 +84,7 @@ function dosingGoal(goals: Goal[]): keyof typeof DOSES {
 }
 
 function allowed(e: Exercise, ctx: PickContext): boolean {
-  const p = ctx.profile;
-  if (!hasKit(e, p.equipment) || p.excluded.includes(e.id) || e.stress.some((a) => p.avoid.includes(a))) return false;
-  if (ctx.sessionUsed.has(e.id)) return false;
-  // A beginner who can already do 5 pull-ups is ready for them.
-  if (e.id === "pull-up" && (p.level.pullUps ?? 0) >= 5) return true;
-  return e.level <= ctx.maxLevel;
+  return !ctx.sessionUsed.has(e.id) && !blocker(e, ctx.profile);
 }
 
 function score(e: Exercise, role: Role, ctx: PickContext): number {
@@ -269,7 +264,7 @@ export function generatePlan(profile: Profile, now: string = new Date().toISOStr
   }
 
   const ctx: PickContext = {
-    profile: p, primary: goals[0], maxLevel: p.experience === "beginner" ? 2 : 3, sessionUsed: new Set(), weekUsed: new Map(),
+    profile: p, primary: goals[0], sessionUsed: new Set(), weekUsed: new Map(),
   };
   const templates = strengthTemplates(strength, p);
   const seen = new Map<string, number>();

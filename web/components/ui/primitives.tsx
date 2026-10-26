@@ -123,7 +123,7 @@ export function Tagline({ words, size }: { words: string[]; size?: string }) {
 }
 
 /** One exercise in a workout or programme list. */
-export function ExerciseCard({ index, name, detail, cue, muscles, status }: { index: number; name: string; detail?: string; cue?: string; muscles?: string[]; status?: "done" | "pr" | "missed" }) {
+export function ExerciseCard({ index, name, detail, cue, muscles, status, action }: { index: number; name: string; detail?: string; cue?: string; muscles?: string[]; status?: "done" | "pr" | "missed"; action?: ReactNode }) {
   return (
     <div className="pu-ex">
       <span className="pu-ex-index" aria-hidden="true">{index < 10 ? `0${index}` : index}</span>
@@ -140,6 +140,7 @@ export function ExerciseCard({ index, name, detail, cue, muscles, status }: { in
         ) : null}
       </span>
       {status ? <Badge tone={status}>{status === "done" ? "Done" : status === "pr" ? "PR" : "Missed"}</Badge> : null}
+      {action}
     </div>
   );
 }

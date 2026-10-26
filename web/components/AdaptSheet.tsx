@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { Sheet } from "./Sheet";
 import { Icon, type IconName } from "./ui/Icon";
 
 const MODES: { icon: IconName; title: string; detail: string }[] = [
@@ -14,42 +14,24 @@ const MODES: { icon: IconName; title: string; detail: string }[] = [
 
 /** The ADAPT MY WORKOUT sheet. The options are shown now; the engine behind them arrives in milestone 4. */
 export function AdaptSheet({ open, onClose }: { open: boolean; onClose: () => void }) {
-  const ref = useRef<HTMLDialogElement>(null);
-
-  useEffect(() => {
-    const d = ref.current;
-    if (!d) return;
-    if (open && !d.open) d.showModal();
-    if (!open && d.open) d.close();
-  }, [open]);
-
   return (
-    <dialog ref={ref} className="sheet" aria-labelledby="adapt-title" onClose={onClose} onClick={(e) => e.target === ref.current && onClose()}>
-      <div className="sheet-body">
-        <div className="sheet-grab" aria-hidden="true" />
-        <div className="sheet-head">
-          <h2 id="adapt-title" className="h-heading">Adapt my workout</h2>
-          <button type="button" className="icon-btn" onClick={onClose} aria-label="Close">
-            <Icon name="x" />
-          </button>
-        </div>
-        <p className="muted">Tell PressUp what today looks like and it reshapes the session around it.</p>
-        <ul className="mode-list">
-          {MODES.map((m) => (
-            <li key={m.title} className="mode">
-              <span className="mode-icon"><Icon name={m.icon} /></span>
-              <span>
-                <strong>{m.title}</strong>
-                <span className="muted">{m.detail}</span>
-              </span>
-            </li>
-          ))}
-        </ul>
-        <p className="note">
-          <Icon name="timer" size={18} />
-          Preview: adapting goes live in the next builds, with a quick check-in on time, energy, sleep and how you feel.
-        </p>
-      </div>
-    </dialog>
+    <Sheet open={open} onClose={onClose} title="Adapt my workout" id="adapt-title">
+      <p className="muted">Tell PressUp what today looks like and it reshapes the session around it.</p>
+      <ul className="mode-list">
+        {MODES.map((m) => (
+          <li key={m.title} className="mode">
+            <span className="mode-icon"><Icon name={m.icon} /></span>
+            <span>
+              <strong>{m.title}</strong>
+              <span className="muted">{m.detail}</span>
+            </span>
+          </li>
+        ))}
+      </ul>
+      <p className="note">
+        <Icon name="timer" size={18} />
+        Preview: adapting goes live in the next builds, with a quick check-in on time, energy, sleep and how you feel.
+      </p>
+    </Sheet>
   );
 }

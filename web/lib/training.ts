@@ -18,6 +18,8 @@ export type Prescription = {
   durationMin?: number;
   /** A short coaching cue, for example the pace of a run. */
   cue?: string;
+  /** The planned exercise this one replaced, when the user swapped it. */
+  swappedFrom?: string;
 };
 
 export type Focus = "lower" | "upper" | "full" | "push" | "pull" | "calisthenics" | "run" | "conditioning";

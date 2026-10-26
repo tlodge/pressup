@@ -7,7 +7,8 @@ The core idea from the brief: **your plan adapts to your life, not the other way
 ## Status
 
 - **Milestone 1 (Foundation):** done (`main`, 638b178).
-- **Milestone 2 (Onboarding and first plan):** built on the `milestone-2` branch. Six-step onboarding (goals, experience, week, setup, likes and limits, starting point), a rules-based plan engine with tests (`npm test`), the week on the Plan tab with reasons, and editable settings on Profile that rebuild the plan. Exercise likes and dislikes are picked from the library in milestone 3.
+- **Milestone 2 (Onboarding and first plan):** done (`main`, b67f6c2).
+- **Milestone 3 (Exercise library):** done (`main`). 52 exercises with how-to steps, coaching cues and easier/harder variations; the Exercises tab with search, body-area filters, a "suits my kit and limits" filter and favourites; detail pages with favourite and leave-out toggles (both rebuild the plan) and personalised swaps; and swapping any exercise in a planned session for one that trains the same thing. Instructions are drafted and need review by a qualified coach; demonstration videos are placeholders. Swaps are lost when the plan is rebuilt (changing settings, favourites or exclusions); keeping them is part of milestone 6.
 
 ## Milestones
 
@@ -35,5 +36,6 @@ The core idea from the brief: **your plan adapts to your life, not the other way
 ## Open questions (needed before the milestone shown)
 
 - Exercise demonstrations: licensed video, commissioned illustrations or photos? (milestone 3 uses text and placeholders)
+- Who reviews the exercise instructions? They are drafted from standard coaching practice; set `GUIDE_REVIEWED` in `web/lib/exercise-guide.ts` once a qualified coach has checked them.
 - Hosting for accounts and data, for example Supabase or Neon with Auth.js (milestone 8)
 - Which AI provider and budget (milestone 9)

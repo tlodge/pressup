@@ -2,9 +2,11 @@
 
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useState } from "react";
 import { useStored } from "@/lib/store";
 import { detail, estimateMinutes } from "@/lib/training";
 import { NeedsProfile } from "./NeedsProfile";
+import { SwapSheet } from "./SwapSheet";
 import { Badge, ExerciseCard, StatTile } from "./ui/primitives";
 import { Icon } from "./ui/Icon";
 
@@ -14,6 +16,7 @@ export function WorkoutPreview() {
   const id = useSearchParams().get("s");
   const stored = useStored();
   const router = useRouter();
+  const [swapIndex, setSwapIndex] = useState<number | null>(null);
   if (stored === "loading") return <div className="screen" aria-busy="true"><div className="skeleton" style={{ height: 420 }} /></div>;
   if (!stored) return <NeedsProfile title="Workout" />;
   const session = id ? stored.plan.sessions[id] : undefined;
@@ -59,9 +62,14 @@ export function WorkoutPreview() {
       <section className="stack-2" aria-label="Exercises">
         {session.exercises.map((e, i) => (
           <ExerciseCard key={e.exerciseId} index={i + 1} name={e.name}
-            detail={e.durationMin ? detail(e) : `${detail(e)} · ${restLabel(e.restSec)}`} cue={e.cue} muscles={e.cue ? undefined : e.muscles} />
+            detail={e.durationMin ? detail(e) : `${detail(e)} · ${restLabel(e.restSec)}`}
+            cue={e.cue ?? (e.swappedFrom ? `Swapped in for ${e.swappedFrom}` : undefined)} muscles={e.cue ? undefined : e.muscles}
+            action={e.durationMin ? null : (
+              <button type="button" className="icon-btn" aria-label={`Swap ${e.name}`} onClick={() => setSwapIndex(i)}><Icon name="swap" size={20} /></button>
+            )} />
         ))}
       </section>
+      <SwapSheet stored={stored} sessionId={id!} index={swapIndex} onClose={() => setSwapIndex(null)} />
     </div>
   );
 }

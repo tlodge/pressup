@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, type ComponentType } from "react";
 import {
@@ -10,6 +11,7 @@ import { WEEKDAY_SHORT } from "@/lib/training";
 import { NeedsProfile } from "./NeedsProfile";
 import { ExperienceStep, GoalsStep, LevelStep, PreferencesStep, ScheduleStep, SetupStep, type StepProps } from "./onboarding/steps";
 import { Button } from "./ui/primitives";
+import { Icon } from "./ui/Icon";
 
 type Section = { id: string; title: string; Editor: ComponentType<StepProps>; summary: (p: Profile) => string; valid?: (p: Profile) => boolean };
 
@@ -91,6 +93,17 @@ export function ProfileScreen() {
             </div>
           );
         })}
+      </section>
+
+      <section className="stack-2" aria-label="Exercises">
+        <p className="eyebrow">Exercises</p>
+        <Link href="/exercises" className="card setting-head setting-link">
+          <span className="setting-text">
+            <span className="field-label">Favourites and left out</span>
+            <span className="muted">{stored.profile.favourites.length} favourite{stored.profile.favourites.length === 1 ? "" : "s"} · {stored.profile.excluded.length} left out of plans</span>
+          </span>
+          <Icon name="chevron-right" className="pw-go" />
+        </Link>
       </section>
 
       <section className="stack-2" aria-label="Account and privacy">

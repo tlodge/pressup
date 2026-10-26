@@ -66,6 +66,30 @@ export function saveProfile(profile: Profile): Stored {
   return stored;
 }
 
+/** Save an edited plan (for example a swapped exercise) without rebuilding it. */
+export function savePlan(plan: WeekPlan) {
+  const current = read();
+  if (current) write({ ...current, plan });
+}
+
+/** Favourite or un-favourite an exercise. Favourites steer exercise choice, so the plan is rebuilt. */
+export function toggleFavourite(id: string) {
+  const current = read();
+  if (!current) return;
+  const p = current.profile;
+  const favourites = p.favourites.includes(id) ? p.favourites.filter((x) => x !== id) : [...p.favourites, id];
+  saveProfile({ ...p, favourites });
+}
+
+/** Leave an exercise out of plans, or bring it back. The plan is rebuilt so it takes effect straight away. */
+export function toggleExcluded(id: string) {
+  const current = read();
+  if (!current) return;
+  const p = current.profile;
+  const excluded = p.excluded.includes(id) ? p.excluded.filter((x) => x !== id) : [...p.excluded, id];
+  saveProfile({ ...p, excluded, favourites: p.favourites.filter((x) => x !== id || !excluded.includes(id)) });
+}
+
 export function clearAll() {
   write(null);
 }

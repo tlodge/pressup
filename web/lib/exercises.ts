@@ -50,6 +50,8 @@ export const EXERCISES: Exercise[] = [
   { id: "incline-dumbbell-press", name: "Incline dumbbell press", pattern: "h-push", muscles: ["Chest", "Shoulders"], kits: [["dumbbells", "bench"]], level: 1, stress: ["shoulders"] },
   { id: "machine-chest-press", name: "Machine chest press", pattern: "h-push", muscles: ["Chest", "Triceps"], kits: [["machine"]], level: 1, stress: [] },
   { id: "push-up", name: "Push-up", pattern: "h-push", muscles: ["Chest", "Triceps"], kits: BW, level: 1, stress: ["wrists"] },
+  { id: "incline-push-up", name: "Incline push-up", pattern: "h-push", muscles: ["Chest", "Triceps"], kits: BW, level: 1, stress: ["wrists"] },
+  { id: "knee-push-up", name: "Knee push-up", pattern: "h-push", muscles: ["Chest", "Triceps"], kits: BW, level: 1, stress: ["wrists"] },
   { id: "dip", name: "Parallel bar dip", pattern: "h-push", muscles: ["Chest", "Triceps"], kits: [["dip-bars"]], level: 3, stress: ["shoulders"] },
   // Vertical push
   { id: "overhead-press", name: "Overhead press", pattern: "v-push", muscles: ["Shoulders", "Triceps"], kits: [["barbell"]], level: 2, stress: ["shoulders", "lower-back"] },
@@ -83,6 +85,22 @@ export const EXERCISES: Exercise[] = [
   { id: "hanging-knee-raise", name: "Hanging knee raise", pattern: "core", muscles: ["Core"], kits: [["pull-up-bar"]], level: 2, stress: [] },
   { id: "hollow-hold", name: "Hollow body hold", pattern: "core", muscles: ["Core"], kits: BW, level: 2, stress: [] },
 ];
+
+/** Body areas used to browse the library. */
+export type Area = "Legs" | "Glutes" | "Chest" | "Back" | "Shoulders" | "Arms" | "Core";
+export const AREAS: Area[] = ["Legs", "Glutes", "Chest", "Back", "Shoulders", "Arms", "Core"];
+const AREA_OF: Record<Pattern, Area> = {
+  squat: "Legs", lunge: "Legs", "quad-iso": "Legs", "ham-iso": "Legs", calves: "Legs", hinge: "Glutes", glute: "Glutes",
+  "h-push": "Chest", "v-push": "Shoulders", shoulders: "Shoulders", "h-pull": "Back", "v-pull": "Back", biceps: "Arms", triceps: "Arms", core: "Core",
+};
+export const areaOf = (e: Exercise): Area => AREA_OF[e.pattern];
+
+export const LEVEL_LABEL = { 1: "Beginner friendly", 2: "Needs some practice", 3: "Advanced" } as const;
+
+export const PATTERN_NAME: Record<Pattern, string> = {
+  squat: "Squat", hinge: "Hip hinge", lunge: "Single-leg", glute: "Glute bridge", "quad-iso": "Knee extension", "ham-iso": "Knee curl", calves: "Calf raise",
+  "h-push": "Horizontal press", "v-push": "Overhead press", "h-pull": "Row", "v-pull": "Vertical pull", shoulders: "Shoulder raise", biceps: "Elbow curl", triceps: "Elbow extension", core: "Trunk",
+};
 
 export const EXERCISE_BY_ID: Record<string, Exercise> = Object.fromEntries(EXERCISES.map((e) => [e.id, e]));
 
