@@ -1,8 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { availableSwaps } from "@/lib/engine/substitute";
-import { isBodyweight } from "@/lib/exercises";
+import { applySwap, availableSwaps } from "@/lib/engine/substitute";
 import { kitLabel } from "@/lib/exercise-format";
 import { savePlan, type Stored } from "@/lib/store";
 import { Sheet } from "./Sheet";
@@ -18,11 +17,7 @@ export function SwapSheet({ stored, sessionId, index, onClose }: { stored: Store
   const choose = (id: string) => {
     if (!current || index === null) return;
     const swap = swaps.find((s) => s.exercise.id === id)!.exercise;
-    const exercises = session.exercises.map((e, i) =>
-      i === index
-        ? { ...e, exerciseId: swap.id, name: swap.name, muscles: swap.muscles, load: isBodyweight(swap) && swap.kits.length === 1 ? "Bodyweight" : undefined, swappedFrom: e.swappedFrom ?? e.name }
-        : e,
-    );
+    const exercises = session.exercises.map((e, i) => (i === index ? applySwap(e, swap) : e));
     savePlan({ ...stored.plan, sessions: { ...stored.plan.sessions, [sessionId]: { ...session, exercises } } });
     onClose();
   };

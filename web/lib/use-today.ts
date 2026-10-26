@@ -13,3 +13,6 @@ export function useToday(): Date | null {
   const key = useSyncExternalStore(subscribe, () => new Date().toDateString(), () => null);
   return key ? new Date(key) : null;
 }
+
+/** A local calendar date as YYYY-MM-DD, used to tie an adaptation to the day it was made. */
+export const dateKey = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;

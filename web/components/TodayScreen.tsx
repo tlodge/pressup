@@ -2,11 +2,11 @@
 
 import Image from "next/image";
 import { useState } from "react";
-import { AdaptSheet } from "./AdaptSheet";
+import { AdaptSheet, Advice, WhyList } from "./AdaptSheet";
 import { Badge, Button, ButtonLink, ExerciseCard, ProgressRing, StatTile } from "./ui/primitives";
-import { useStored } from "@/lib/store";
+import { adaptationFor, clearAdaptation, useStored } from "@/lib/store";
 import { WEEKDAY_LONG, WEEKDAY_SHORT, detail, estimateMinutes, weekdayOf, type Session, type WeekPlan } from "@/lib/training";
-import { useToday } from "@/lib/use-today";
+import { dateKey, useToday } from "@/lib/use-today";
 
 export function TodayScreen() {
   const today = useToday();
@@ -18,10 +18,21 @@ export function TodayScreen() {
 
   const { plan } = stored;
   const wd = weekdayOf(today);
+  const date = dateKey(today);
   const todays = plan.days.find((d) => d.weekday === wd);
   const next = plan.days.find((d) => d.weekday > wd) ?? plan.days[0];
-  const session = todays ? plan.sessions[todays.sessionId] : null;
   const nextSession = plan.sessions[next.sessionId];
+  // On a rest day, ADAPT MY WORKOUT builds a light quick workout from the session easiest on the legs, preferring
+  // one that isn't coming up soon, so the extra work doesn't eat into the next planned session's recovery.
+  const daysUntil = (d: number) => (d - wd + 7) % 7;
+  const restPick = [...plan.days].sort((a, b) => {
+    const [x, y] = [plan.sessions[a.sessionId], plan.sessions[b.sessionId]];
+    return x.legLoad - y.legLoad || Number(x.hard) - Number(y.hard) || daysUntil(b.weekday) - daysUntil(a.weekday);
+  })[0];
+  const sessionId = todays?.sessionId ?? restPick.sessionId;
+  const adapted = adaptationFor(stored, date, sessionId);
+  const planned = todays ? plan.sessions[todays.sessionId] : null;
+  const session = adapted?.result.kind === "session" ? adapted.result.session : planned;
   const dateLine = today.toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long" });
 
   return (
@@ -31,10 +42,28 @@ export function TodayScreen() {
         <Badge>{plan.days.length} days a week</Badge>
       </header>
 
-      {session && todays ? (
+      {adapted?.result.kind === "rest" ? (
         <>
           <section className="stack-2">
-            <p className="eyebrow">{dateLine} · Today&rsquo;s session</p>
+            <p className="eyebrow">{dateLine} · Rest day taken</p>
+            <h1 className="h-display">Recover.</h1>
+            <p className="muted">Next up is {nextSession.name} on {WEEKDAY_LONG[next.weekday]}.</p>
+          </section>
+          <section className="card stack-3">
+            <WhyList items={adapted.result.reasons} />
+            <Advice items={adapted.result.advice} />
+          </section>
+          {/* A rest the user chose can be undone. A rest PressUp called for (pain) can only be revisited through a new check-in. */}
+          {adapted.request.rest ? (
+            <Button variant="ghost" block onClick={clearAdaptation}>Back to today&rsquo;s session</Button>
+          ) : (
+            <Button variant="ghost" block icon="adapt" onClick={() => setAdapting(true)}>Check in again</Button>
+          )}
+        </>
+      ) : session ? (
+        <>
+          <section className="stack-2">
+            <p className="eyebrow">{dateLine} · {adapted ? adapted.label : "Today\u2019s session"}</p>
             <h1 className="h-display">{session.name}</h1>
             <p className="muted">{session.purpose}</p>
           </section>
@@ -42,13 +71,15 @@ export function TodayScreen() {
           <SessionStats session={session} />
 
           <div className="stack-3">
-            <ButtonLink href={`/workout?s=${todays.sessionId}`} variant="primary" size="lg" block icon="play">
+            <ButtonLink href={`/workout?s=${sessionId}`} variant="primary" size="lg" block icon="play">
               Start workout
             </ButtonLink>
             <Button variant="secondary" size="lg" block icon="adapt" onClick={() => setAdapting(true)}>
-              Adapt my workout
+              {adapted ? "Adapt again" : "Adapt my workout"}
             </Button>
           </div>
+
+          {adapted?.result.kind === "session" ? <AdaptedCard changes={adapted.result.changes} advice={adapted.result.advice} restDay={!todays} /> : null}
 
           <ExerciseList session={session} />
         </>
@@ -67,8 +98,19 @@ export function TodayScreen() {
       )}
 
       <WeekCard plan={plan} weekday={wd} />
-      <AdaptSheet open={adapting} onClose={() => setAdapting(false)} />
+      <AdaptSheet open={adapting} onClose={() => setAdapting(false)} stored={stored} sessionId={sessionId} date={date} restDay={!todays} />
     </div>
+  );
+}
+
+/** What changed from the plan and why, with a way back to the planned session. */
+function AdaptedCard({ changes, advice, restDay }: { changes: string[]; advice: string[]; restDay: boolean }) {
+  return (
+    <section className="card stack-3">
+      {changes.length ? <WhyList items={changes} title="Why it changed" /> : <p className="body-copy">No changes needed: today&rsquo;s session already fits.</p>}
+      <Advice items={advice} />
+      <button type="button" className="text-link" onClick={clearAdaptation}>{restDay ? "Back to resting today" : "Back to the planned session"}</button>
+    </section>
   );
 }
 

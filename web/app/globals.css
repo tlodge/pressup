@@ -173,3 +173,14 @@ a.pw-card:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 
 @media (prefers-reduced-motion: reduce) {
   .sheet[open], .skeleton { animation: none; }
 }
+
+/* Adapt: check-in and reasons */
+button.text-link { background: none; border: 0; padding: 0; font: inherit; font-size: 14px; cursor: pointer; align-self: flex-start; }
+.checkin-cta { display: flex; align-items: center; gap: var(--space-3); width: 100%; text-align: left; font: inherit; color: var(--ink); cursor: pointer; background: var(--accent-soft); border: 1px solid var(--press-yellow); border-radius: var(--radius-sm); padding: var(--space-4); }
+.checkin-cta > span { flex: 1; min-width: 0; }
+.checkin-cta strong { display: block; font-weight: 500; font-size: 17px; line-height: 24px; }
+.checkin-cta svg { color: var(--accent); flex: none; }
+.checkin-cta:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+.why-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--space-2); }
+.why-list li { display: flex; gap: var(--space-2); align-items: flex-start; font-size: 14px; line-height: 20px; }
+.why-list svg { flex: none; margin-top: 2px; color: var(--accent); }

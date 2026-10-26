@@ -1,8 +1,9 @@
 /* Swaps that keep an exercise's training purpose.
    A swap must train the same movement pattern, or a closely related one that hits the same muscles.
    It is never a random exercise: the candidate list is closed, and anything the user can't do safely is marked unavailable. */
-import { EXERCISES, EXERCISE_BY_ID, PATTERN_NAME, type Exercise, type Pattern } from "../exercises";
+import { EXERCISES, EXERCISE_BY_ID, PATTERN_NAME, isBodyweight, type Exercise, type Pattern } from "../exercises";
 import type { Profile } from "../profile";
+import type { Prescription } from "../training";
 import { blocker, type Blocker } from "./eligibility";
 
 /** Related patterns that can stand in when the same pattern isn't possible. */
@@ -38,3 +39,8 @@ export function findSwaps(exerciseId: string, profile: Profile, skip: string[] =
 /** Only the swaps this user can do right now. */
 export const availableSwaps = (exerciseId: string, profile: Profile, skip: string[] = []) =>
   findSwaps(exerciseId, profile, skip).filter((s) => !s.blocker);
+
+/** Put a swap into a prescription. Sets, reps and rest stay as planned; the load is cleared because it belonged to the old exercise. */
+export const applySwap = (p: Prescription, e: Exercise): Prescription => ({
+  ...p, exerciseId: e.id, name: e.name, muscles: e.muscles, load: isBodyweight(e) && e.kits.length === 1 ? "Bodyweight" : undefined, swappedFrom: p.swappedFrom ?? p.name,
+});

@@ -2,11 +2,15 @@
 
 /* The user's profile and plan, kept in this browser until accounts arrive in milestone 8. */
 import { useSyncExternalStore } from "react";
+import type { Adaptation, AdaptRequest } from "./engine/adapt";
 import { generatePlan } from "./engine/plan";
 import type { Profile } from "./profile";
 import type { WeekPlan } from "./training";
 
-export type Stored = { profile: Profile; plan: WeekPlan };
+/** Today's adapted session (or rest), from the check-in or ADAPT MY WORKOUT. It only counts on the day it was made. */
+export type DayAdaptation = { date: string; sessionId: string; label: string; request: AdaptRequest; result: Adaptation };
+
+export type Stored = { profile: Profile; plan: WeekPlan; today?: DayAdaptation };
 
 const KEY = "pressup.v1";
 const listeners = new Set<() => void>();
@@ -58,7 +62,7 @@ export function useStored(): Stored | null | "loading" {
   return useSyncExternalStore<Stored | null | "loading">(subscribe, read, () => "loading");
 }
 
-/** Save the profile and rebuild the plan from it. */
+/** Save the profile and rebuild the plan from it. A rebuilt plan drops today's adaptation, which belonged to the old one. */
 export function saveProfile(profile: Profile): Stored {
   const now = new Date().toISOString();
   const stored = { profile: { ...profile, updatedAt: now }, plan: generatePlan(profile, now) };
@@ -89,6 +93,22 @@ export function toggleExcluded(id: string) {
   const excluded = p.excluded.includes(id) ? p.excluded.filter((x) => x !== id) : [...p.excluded, id];
   saveProfile({ ...p, excluded, favourites: p.favourites.filter((x) => x !== id || !excluded.includes(id)) });
 }
+
+/** Use an adapted session (or a rest day) for today. */
+export function saveAdaptation(today: DayAdaptation) {
+  const current = read();
+  if (current) write({ ...current, today });
+}
+
+/** Go back to the planned session. */
+export function clearAdaptation() {
+  const current = read();
+  if (current) write({ profile: current.profile, plan: current.plan });
+}
+
+/** Today's adaptation, if one was made today for this session. */
+export const adaptationFor = (stored: Stored, date: string, sessionId?: string) =>
+  stored.today?.date === date && (!sessionId || stored.today.sessionId === sessionId) ? stored.today : null;
 
 export function clearAll() {
   write(null);
