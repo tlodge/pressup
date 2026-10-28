@@ -142,7 +142,7 @@ export function TodayScreen() {
 function DoneCard({ log }: { log: WorkoutLog }) {
   const sets = log.exercises.reduce((n, e) => n + doneSets(e).length, 0);
   const effort = SESSION_EFFORT.find((o) => o.value === log.effort)?.label;
-  const parts = [log.timed ? `${log.timed.minutes} min` : `${sets} sets in ${durationMin(log)} min`, effort ? `felt ${effort.toLowerCase()}` : ""].filter(Boolean);
+  const parts = [log.timed ? `${log.timed.minutes} min${log.timed.distanceKm ? `, ${log.timed.distanceKm} km` : ""}` : `${sets} sets in ${durationMin(log)} min`, effort ? `felt ${effort.toLowerCase()}` : ""].filter(Boolean);
   return (
     <section className="card stack-3">
       <p className="week-copy"><strong><Badge tone="done">Done</Badge></strong>{parts.join(" · ")}</p>

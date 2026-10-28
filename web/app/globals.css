@@ -241,3 +241,46 @@ button.pw-card:focus-visible { outline: 2px solid var(--focus-ring); outline-off
 .mini-week li { display: grid; grid-template-columns: 44px 1fr; gap: var(--space-2); padding: var(--space-1) var(--space-2); border-radius: var(--radius-sm); color: var(--ink-muted); }
 .mini-week li span:first-child { font-family: var(--font-condensed); font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
 .mini-week li.is-changed { background: var(--accent-soft); color: var(--ink); }
+
+/* Progress: charts in the calm register. Marks are press-yellow, axes and grid are hairlines one step off the surface. */
+.goal-card .hero-figure { font-family: var(--font-sans); font-weight: 600; font-size: 52px; line-height: 1; color: var(--ink); }
+.goal-card .hero-figure span { font-size: 18px; font-weight: 400; color: var(--ink-muted); margin-left: var(--space-2); }
+.chart { margin: 0; display: flex; flex-direction: column; gap: var(--space-2); }
+.chart-plot { position: relative; }
+.chart svg { display: block; width: 100%; height: auto; overflow: visible; }
+.chart-grid { stroke: var(--line); stroke-width: 1; }
+.chart-axis { stroke: var(--line-strong); stroke-width: 1; }
+.chart-tick { fill: var(--ink-muted); font-family: var(--font-condensed); font-size: 11px; font-weight: 600; letter-spacing: 0.04em; font-variant-numeric: tabular-nums; }
+.chart-value { fill: var(--ink); font-family: var(--font-condensed); font-size: 13px; font-weight: 700; }
+.chart-bar { fill: var(--accent-line); }
+.chart-target { stroke: var(--ink-muted); stroke-width: 2; stroke-linecap: round; }
+.chart-line { fill: none; stroke: var(--accent-line); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+.chart-dot { fill: var(--accent-line); stroke: var(--surface-raised); stroke-width: 2; }
+.chart-dot-quiet { fill: var(--surface-raised); stroke: var(--accent-line); }
+.chart-hit { fill: transparent; }
+.chart-col, .chart-pt { outline: none; cursor: default; }
+.chart-col:hover .chart-bar, .chart-col:focus-visible .chart-bar { fill: var(--press-yellow); filter: brightness(1.12); }
+.chart-col:focus-visible .chart-hit, .chart-pt:focus-visible .chart-hit { stroke: var(--focus-ring); stroke-width: 2; }
+.chart-tip { position: absolute; transform: translate(-50%, -100%); pointer-events: none; background: var(--surface); border: 1px solid var(--line-strong); border-radius: var(--radius-sm); padding: 6px 10px; display: flex; flex-direction: column; white-space: nowrap; box-shadow: var(--shadow-float); z-index: 2; }
+.chart-tip strong { font-family: var(--font-condensed); font-size: 18px; line-height: 20px; font-variant-numeric: tabular-nums; }
+.chart-tip span { font-size: 12px; line-height: 16px; color: var(--ink-muted); }
+.chart-legend { display: flex; align-items: center; gap: var(--space-2); font-size: 13px; color: var(--ink-muted); }
+.key-bar { width: 10px; height: 12px; border-radius: 2px 2px 0 0; background: var(--accent-line); display: inline-block; }
+.key-rule { width: 14px; height: 2px; border-radius: 1px; background: var(--ink-muted); display: inline-block; margin-left: var(--space-2); }
+.chart-table summary { font-size: 14px; color: var(--ink-muted); cursor: pointer; }
+.chart-table summary:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+.chart-table table { width: 100%; margin-top: var(--space-2); border-collapse: collapse; font-size: 14px; font-variant-numeric: tabular-nums; }
+.chart-table th, .chart-table td { text-align: left; padding: 4px 0; border-bottom: 1px solid var(--line); font-weight: 400; }
+.chart-table td { text-align: right; }
+.trend-head { display: flex; justify-content: space-between; align-items: baseline; gap: var(--space-2); }
+.trend-head strong { font-weight: 500; font-size: 17px; }
+.best-row, .history-row { display: flex; align-items: center; gap: var(--space-3); justify-content: space-between; }
+.best-row { justify-content: flex-start; }
+.history-row > span { display: flex; flex-direction: column; min-width: 0; }
+.log-list li:has(> a) { padding: 0; }
+.log-list li > a { padding: var(--space-3) var(--space-4); border-radius: var(--radius-sm); }
+.log-list li > a:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+.milestones { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--space-2); }
+.milestones li { display: flex; gap: var(--space-3); align-items: center; font-size: 15px; line-height: 20px; }
+.ms-mark { width: 24px; height: 24px; flex: none; border-radius: var(--radius-pill); border: 2px solid var(--line-strong); display: grid; place-items: center; }
+.milestones li.is-done .ms-mark { background: var(--accent-line); border-color: var(--accent-line); color: #0e0e0e; }

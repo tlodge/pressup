@@ -1,6 +1,7 @@
 "use client";
 
 import { nextTarget, personalBests } from "@/lib/engine/progress";
+import { fmtPace } from "@/lib/engine/stats";
 import { EXERCISE_BY_ID } from "@/lib/exercises";
 import type { Stored } from "@/lib/store";
 import { doneSets, durationMin, fmtKg, fmtSet, SESSION_EFFORT, volumeKg, type WorkoutLog } from "@/lib/workout-log";
@@ -41,6 +42,8 @@ export function WorkoutSummary({ stored, log }: { stored: Stored; log: WorkoutLo
       {log.timed ? (
         <div className="grid-2">
           <StatTile label="Time" value={log.timed.minutes} unit="min" />
+          {log.timed.distanceKm ? <StatTile label="Distance" value={log.timed.distanceKm} unit="km" /> : null}
+          {log.timed.distanceKm ? <StatTile label="Pace" value={fmtPace(log.timed.minutes / log.timed.distanceKm)} unit="/km" /> : null}
           <StatTile label="Effort" value={effort ?? "–"} />
         </div>
       ) : (

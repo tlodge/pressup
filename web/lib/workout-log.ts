@@ -61,8 +61,8 @@ export type WorkoutLog = {
   light: boolean;
   adaptedLabel?: string;
   exercises: ExerciseLog[];
-  /** Runs and conditioning: minutes planned and done. */
-  timed?: { name: string; detail: string; plannedMin: number; minutes: number };
+  /** Runs and conditioning: minutes planned and done, and the distance when the user logs it. */
+  timed?: { name: string; detail: string; plannedMin: number; minutes: number; distanceKm?: number };
   effort?: number;
   notes?: string;
 };

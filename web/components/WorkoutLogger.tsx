@@ -245,9 +245,10 @@ function TimedLogger({ log, onDone }: { log: WorkoutLog; onDone: (id: string) =>
         <h1 className="log-name">{timed.name}</h1>
         <p className="log-target"><strong>{timed.detail}</strong></p>
       </section>
-      <Field label="How long did you go?">
+      <Field label="How long did you go?" hint="Add the distance if you know it, and Progress shows your pace.">
         <div className="log-entry">
-          <Stepper label="Minutes" value={timed.minutes} step={5} unit="min" min={5} onChange={setMinutes} />
+          <Stepper label="Minutes" value={timed.minutes} step={1} unit="min" min={1} onChange={setMinutes} />
+          <Stepper label="Distance" value={timed.distanceKm} step={0.5} start={5} unit="km" min={0} onChange={(distanceKm) => updateWorkout({ ...log, timed: { ...timed, distanceKm: distanceKm || undefined } })} />
         </div>
       </Field>
       <Field label="How hard was it?">
