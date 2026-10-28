@@ -216,11 +216,11 @@ function strengthTemplates(k: number, p: Profile): Template[] {
   }
 }
 
-const adjacent = (a: Weekday, b: Weekday) => (b - a + 7) % 7 === 1;
+export const adjacent = (a: Weekday, b: Weekday) => (b - a + 7) % 7 === 1;
 const isHardRun = (s: Session) => s.focus === "run" && s.hard;
 
 /** Recovery cost of a layout: lower is better. */
-function layoutPenalty(order: Session[], days: Weekday[]): number {
+export function layoutPenalty(order: Session[], days: Weekday[]): number {
   let pen = 0;
   const weekendChosen = days.some((d) => d >= 5);
   order.forEach((a, i) => {

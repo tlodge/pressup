@@ -16,3 +16,9 @@ export function useToday(): Date | null {
 
 /** A local calendar date as YYYY-MM-DD, used to tie an adaptation to the day it was made. */
 export const dateKey = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+
+/** The seven dates of the week a date falls in, Monday first, as YYYY-MM-DD. */
+export function weekDates(d: Date): string[] {
+  const monday = (d.getDay() + 6) % 7;
+  return Array.from({ length: 7 }, (_, i) => dateKey(new Date(d.getFullYear(), d.getMonth(), d.getDate() - monday + i)));
+}

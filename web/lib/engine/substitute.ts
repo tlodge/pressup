@@ -3,7 +3,7 @@
    It is never a random exercise: the candidate list is closed, and anything the user can't do safely is marked unavailable. */
 import { EXERCISES, EXERCISE_BY_ID, PATTERN_NAME, isBodyweight, type Exercise, type Pattern } from "../exercises";
 import type { Profile } from "../profile";
-import type { Prescription } from "../training";
+import type { Prescription, WeekPlan } from "../training";
 import { blocker, type Blocker } from "./eligibility";
 
 /** Related patterns that can stand in when the same pattern isn't possible. */
@@ -43,4 +43,30 @@ export const availableSwaps = (exerciseId: string, profile: Profile, skip: strin
 /** Put a swap into a prescription. Sets, reps and rest stay as planned; the load is cleared because it belonged to the old exercise. */
 export const applySwap = (p: Prescription, e: Exercise): Prescription => ({
   ...p, exerciseId: e.id, name: e.name, muscles: e.muscles, load: isBodyweight(e) && e.kits.length === 1 ? "Bodyweight" : undefined, swappedFrom: p.swappedFrom ?? p.name,
+  swappedFromId: p.swappedFromId ?? (p.swappedFrom ? undefined : p.exerciseId),
 });
+
+/** The template a session id was built from: "mon-upper-a" → "upper-a". Survives a move to another day. */
+const templateOf = (sessionId: string) => sessionId.split("-").slice(1).join("-");
+
+/** Carry the user's swaps into a rebuilt plan, wherever the same session still has the exercise they swapped out
+    and the swap is still allowed. Returns the plan and how many swaps were kept. */
+export function carrySwaps(old: WeekPlan, next: WeekPlan, profile: Profile): { plan: WeekPlan; kept: number } {
+  let kept = 0;
+  const sessions = { ...next.sessions };
+  for (const [oldId, s] of Object.entries(old.sessions)) {
+    for (const p of s.exercises.filter((x) => x.swappedFrom)) {
+      const fromId = p.swappedFromId ?? EXERCISES.find((e) => e.name === p.swappedFrom)?.id;
+      const swap = EXERCISE_BY_ID[p.exerciseId];
+      if (!fromId || !swap || blocker(swap, profile)) continue;
+      for (const [id, n] of Object.entries(sessions)) {
+        if (templateOf(id) !== templateOf(oldId)) continue;
+        const i = n.exercises.findIndex((e) => e.exerciseId === fromId);
+        if (i < 0 || n.exercises.some((e) => e.exerciseId === swap.id)) continue;
+        sessions[id] = { ...n, exercises: n.exercises.map((e, j) => (j === i ? applySwap(e, swap) : e)) };
+        kept += 1;
+      }
+    }
+  }
+  return { plan: { ...next, sessions }, kept };
+}

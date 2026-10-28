@@ -20,6 +20,7 @@ export type Prescription = {
   cue?: string;
   /** The planned exercise this one replaced, when the user swapped it. */
   swappedFrom?: string;
+  swappedFromId?: string;
 };
 
 export type Focus = "lower" | "upper" | "full" | "push" | "pull" | "calisthenics" | "run" | "conditioning";

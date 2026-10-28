@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
-import { adaptationFor, clearAdaptation, loggedFor, startWorkout, useStored } from "@/lib/store";
+import { adaptationFor, clearAdaptation, loggedFor, sessionFor, startWorkout, useStored } from "@/lib/store";
 import { detail, estimateMinutes } from "@/lib/training";
 import { dateKey, useToday } from "@/lib/use-today";
 import { NeedsProfile } from "./NeedsProfile";
@@ -33,7 +33,7 @@ export function WorkoutPreview() {
   if (stored.active && stored.active.sessionId === id) return <WorkoutLogger key={stored.active.id} log={stored.active} />;
   // Today's adapted version replaces the planned one. Swaps edit the plan, so they're offered on the planned version only.
   const adapted = id && today ? adaptationFor(stored, dateKey(today), id) : null;
-  const session = adapted?.result.kind === "session" ? adapted.result.session : id ? stored.plan.sessions[id] : undefined;
+  const session = adapted?.result.kind === "session" ? adapted.result.session : id ? (today ? sessionFor(stored, id, today) : stored.plan.sessions[id]) : undefined;
 
   const back = (
     <button type="button" className="back" onClick={() => router.back()}>
@@ -103,7 +103,7 @@ export function WorkoutPreview() {
             )} />
         ))}
       </section>
-      <SwapSheet stored={stored} sessionId={id!} index={swapIndex} onClose={() => setSwapIndex(null)} />
+      {today ? <SwapSheet stored={stored} sessionId={id!} index={swapIndex} date={today} onClose={() => setSwapIndex(null)} /> : null}
     </div>
   );
 }

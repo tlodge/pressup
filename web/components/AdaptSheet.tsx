@@ -3,8 +3,8 @@
 import { useState, type ReactNode } from "react";
 import { adaptSession, AWAY_LABEL, REST_OK, homeKit, kitOptions, type AdaptRequest, type Energy, type Sleep, type Soreness, type TimeAway } from "@/lib/engine/adapt";
 import { BODY_AREAS, type BodyArea, type Equipment } from "@/lib/profile";
-import { saveAdaptation, type Stored } from "@/lib/store";
-import { estimateMinutes } from "@/lib/training";
+import { saveAdaptation, sessionFor, type Stored } from "@/lib/store";
+import { estimateMinutes, type Session } from "@/lib/training";
 import { ChipChoice, Field, toggle } from "./onboarding/fields";
 import { Sheet } from "./Sheet";
 import { Icon, type IconName } from "./ui/Icon";
@@ -35,7 +35,7 @@ export function AdaptSheet({ open, onClose, stored, sessionId, date, restDay }: 
     onClose();
     setView({ name: "menu" });
   };
-  const planned = stored.plan.sessions[sessionId];
+  const planned = sessionFor(stored, sessionId, new Date(`${date}T12:00:00`));
   if (!planned) return null;
   const plannedMin = estimateMinutes(planned);
   const result = (label: string, request: AdaptRequest) => setView({ name: "result", label, request });
@@ -135,7 +135,7 @@ export function AdaptSheet({ open, onClose, stored, sessionId, date, restDay }: 
     case "result":
       title = "Today";
       body = (
-        <Result stored={stored} sessionId={sessionId} label={view.label} request={view.request} back={back}
+        <Result stored={stored} planned={planned} label={view.label} request={view.request} back={back}
           onAccept={(label, request, adaptation) => {
             saveAdaptation({ date, sessionId, label, request, result: adaptation });
             close();
@@ -224,15 +224,14 @@ function KitPicker({ initial, onDone, back }: { initial: Equipment[]; onDone: (k
   );
 }
 
-function Result({ stored, sessionId, label, request, back, onAccept }: {
+function Result({ stored, planned, label, request, back, onAccept }: {
   stored: Stored;
-  sessionId: string;
+  planned: Session;
   label: string;
   request: AdaptRequest;
   back: ReactNode;
   onAccept: (label: string, request: AdaptRequest, adaptation: ReturnType<typeof adaptSession>) => void;
 }) {
-  const planned = stored.plan.sessions[sessionId];
   const a = adaptSession(planned, stored.profile, request);
 
   if (a.kind === "rest") {

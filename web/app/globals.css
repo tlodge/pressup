@@ -218,3 +218,26 @@ button.text-link { background: none; border: 0; padding: 0; font: inherit; font-
 .why-list .pu-badge { flex: none; }
 .pu-stepper button:disabled { opacity: 0.4; cursor: default; }
 .log-entry .pu-stepper-value { min-width: 64px; }
+
+/* Plan: this week, moving sessions */
+.pw-session { padding-right: var(--space-2); }
+.pw-session .pw-main { align-self: stretch; justify-content: center; }
+.pw-session .pw-main:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 4px; border-radius: 4px; }
+.pw-handle { flex: none; width: 44px; height: 44px; display: grid; place-items: center; border: 0; background: transparent; color: var(--ink-muted); border-radius: var(--radius-sm); cursor: grab; touch-action: none; }
+.pw-handle:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+.pw-handle:active { cursor: grabbing; background: var(--surface-sunken); }
+.grip { width: 14px; height: 18px; background-image: radial-gradient(circle, currentColor 1.6px, transparent 1.8px); background-size: 7px 6px; }
+button.pw-card { width: 100%; border: 0; font: inherit; color: var(--ink); text-align: left; cursor: pointer; }
+button.pw-card:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+.pw-missed { box-shadow: inset 0 0 0 1px var(--line-strong); }
+.pw-skipped strong { text-decoration: line-through; color: var(--ink-muted); font-weight: 400; }
+.pw-past .pw-name { opacity: 0.7; }
+.plan-week.is-dragging { user-select: none; }
+.pw-drop-ok .pw-card { box-shadow: inset 0 0 0 2px var(--accent-line); }
+.pw-drop-no .pw-card { opacity: 0.45; }
+.pw-over.pw-drop-ok .pw-card { background: var(--accent-soft); }
+.mode-off { opacity: 0.55; cursor: not-allowed; }
+.mini-week { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; font-size: 14px; line-height: 20px; }
+.mini-week li { display: grid; grid-template-columns: 44px 1fr; gap: var(--space-2); padding: var(--space-1) var(--space-2); border-radius: var(--radius-sm); color: var(--ink-muted); }
+.mini-week li span:first-child { font-family: var(--font-condensed); font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
+.mini-week li.is-changed { background: var(--accent-soft); color: var(--ink); }

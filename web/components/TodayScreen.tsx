@@ -7,8 +7,8 @@ import { useState } from "react";
 import { AdaptSheet, Advice, WhyList } from "./AdaptSheet";
 import { Icon } from "./ui/Icon";
 import { Badge, Button, ButtonLink, ExerciseCard, ProgressRing, StatTile } from "./ui/primitives";
-import { adaptationFor, clearAdaptation, loggedFor, startWorkout, useStored, type Stored } from "@/lib/store";
-import { WEEKDAY_LONG, WEEKDAY_SHORT, detail, estimateMinutes, weekdayOf, type Session } from "@/lib/training";
+import { adaptationFor, clearAdaptation, doneWeekdays, loggedFor, startWorkout, useStored, weekView, type Stored } from "@/lib/store";
+import { WEEKDAY_LONG, WEEKDAY_SHORT, detail, estimateMinutes, weekdayOf, type Session, type Weekday } from "@/lib/training";
 import { dateKey, useToday } from "@/lib/use-today";
 import { doneSets, durationMin, SESSION_EFFORT, type WorkoutLog } from "@/lib/workout-log";
 
@@ -21,11 +21,13 @@ export function TodayScreen() {
   if (!today || stored === "loading") return <TodaySkeleton />;
   if (!stored) return <Welcome />;
 
-  const { plan } = stored;
+  // This week's layout, with any moves or skips; skipped sessions count as rest.
+  const view = weekView(stored, today);
+  const plan = { days: view.days.filter((d) => !view.skipped.includes(d.sessionId)), sessions: view.sessions };
   const wd = weekdayOf(today);
   const date = dateKey(today);
   const todays = plan.days.find((d) => d.weekday === wd);
-  const next = plan.days.find((d) => d.weekday > wd) ?? plan.days[0];
+  const next = plan.days.find((d) => d.weekday > wd) ?? stored.plan.days[0];
   const nextSession = plan.sessions[next.sessionId];
   // On a rest day, ADAPT MY WORKOUT builds a light quick workout from the session easiest on the legs, preferring
   // one that isn't coming up soon, so the extra work doesn't eat into the next planned session's recovery.
@@ -50,7 +52,7 @@ export function TodayScreen() {
     <div className="screen">
       <header className="top">
         <Image src="/brand/pressup-wordmark-on-dark.png" alt="PressUp" width={107} height={22} priority />
-        <Badge>{plan.days.length} days a week</Badge>
+        <Badge>{stored.plan.days.length} days a week</Badge>
       </header>
 
       {active && active.sessionId !== sessionId ? (
@@ -212,13 +214,12 @@ function ExerciseList({ session, title }: { session: Session; title?: string }) 
 }
 
 function WeekCard({ stored, today }: { stored: Stored; today: Date }) {
-  const { plan } = stored;
+  const view = weekView(stored, today);
   const weekday = weekdayOf(today);
-  // This week's dates, Monday first, and the days with a logged workout.
-  const dates = WEEKDAY_SHORT.map((_, i) => dateKey(new Date(today.getFullYear(), today.getMonth(), today.getDate() - weekday + i)));
-  const doneDays = new Set((stored.logs ?? []).filter((l) => dates.includes(l.date)).map((l) => l.date));
-  const total = plan.days.length;
-  const done = Math.min(total, doneDays.size);
+  const doneDays = doneWeekdays(stored, today);
+  const days = view.days.filter((d) => !view.skipped.includes(d.sessionId));
+  const total = Math.max(1, days.length, doneDays.length);
+  const done = Math.min(total, doneDays.length);
   const left = total - done;
   return (
     <section className="card week" aria-label="This week">
@@ -232,8 +233,8 @@ function WeekCard({ stored, today }: { stored: Stored; today: Date }) {
         </p>
         <ol className="week-strip">
           {WEEKDAY_SHORT.map((d, i) => {
-            const planned = plan.days.some((p) => p.weekday === i);
-            const state = doneDays.has(dates[i]) ? "done" : i === weekday ? "today" : !planned ? "rest" : i < weekday ? "open" : "planned";
+            const planned = days.some((p) => p.weekday === i);
+            const state = doneDays.includes(i as Weekday) ? "done" : i === weekday ? "today" : !planned ? "rest" : i < weekday ? "open" : "planned";
             const label = { done: "done", today: "today", rest: "rest", open: "not logged", planned: "planned" }[state];
             return (
               <li key={d} className={`day day-${state}`} aria-label={`${d}: ${label}`}>

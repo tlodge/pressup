@@ -3,22 +3,22 @@
 import Link from "next/link";
 import { applySwap, availableSwaps } from "@/lib/engine/substitute";
 import { kitLabel } from "@/lib/exercise-format";
-import { savePlan, type Stored } from "@/lib/store";
+import { saveSession, sessionFor, type Stored } from "@/lib/store";
 import { Sheet } from "./Sheet";
 import { Icon } from "./ui/Icon";
 
 /** Swap one exercise in a planned session for one that trains the same thing. Sets, reps and rest stay the same. */
-export function SwapSheet({ stored, sessionId, index, onClose }: { stored: Stored; sessionId: string; index: number | null; onClose: () => void }) {
-  const session = stored.plan.sessions[sessionId];
+export function SwapSheet({ stored, sessionId, index, date, onClose }: { stored: Stored; sessionId: string; index: number | null; date: Date; onClose: () => void }) {
+  const session = sessionFor(stored, sessionId, date);
   const current = index !== null ? session?.exercises[index] : undefined;
   const others = session ? session.exercises.map((e) => e.exerciseId) : [];
   const swaps = current ? availableSwaps(current.exerciseId, stored.profile, others).slice(0, 5) : [];
 
   const choose = (id: string) => {
-    if (!current || index === null) return;
+    if (!session || !current || index === null) return;
     const swap = swaps.find((s) => s.exercise.id === id)!.exercise;
     const exercises = session.exercises.map((e, i) => (i === index ? applySwap(e, swap) : e));
-    savePlan({ ...stored.plan, sessions: { ...stored.plan.sessions, [sessionId]: { ...session, exercises } } });
+    saveSession(sessionId, { ...session, exercises }, date);
     onClose();
   };
 
