@@ -38,6 +38,9 @@ export type AdaptRequest = {
   rest?: boolean;
 };
 
+/** A lighter day: logs from it are not used to raise next session's targets. */
+export const isLight = (req: AdaptRequest) => !!(req.energy === "low" || req.sleep === "poor" || req.soreness === "very" || req.away || req.extra);
+
 export type Adaptation =
   | { kind: "session"; session: Session; changes: string[]; advice: string[] }
   | { kind: "rest"; reasons: string[]; advice: string[] };

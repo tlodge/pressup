@@ -1,17 +1,22 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { AdaptSheet, Advice, WhyList } from "./AdaptSheet";
+import { Icon } from "./ui/Icon";
 import { Badge, Button, ButtonLink, ExerciseCard, ProgressRing, StatTile } from "./ui/primitives";
-import { adaptationFor, clearAdaptation, useStored } from "@/lib/store";
-import { WEEKDAY_LONG, WEEKDAY_SHORT, detail, estimateMinutes, weekdayOf, type Session, type WeekPlan } from "@/lib/training";
+import { adaptationFor, clearAdaptation, loggedFor, startWorkout, useStored, type Stored } from "@/lib/store";
+import { WEEKDAY_LONG, WEEKDAY_SHORT, detail, estimateMinutes, weekdayOf, type Session } from "@/lib/training";
 import { dateKey, useToday } from "@/lib/use-today";
+import { doneSets, durationMin, SESSION_EFFORT, type WorkoutLog } from "@/lib/workout-log";
 
 export function TodayScreen() {
   const today = useToday();
   const stored = useStored();
   const [adapting, setAdapting] = useState(false);
+  const router = useRouter();
 
   if (!today || stored === "loading") return <TodaySkeleton />;
   if (!stored) return <Welcome />;
@@ -34,6 +39,12 @@ export function TodayScreen() {
   const planned = todays ? plan.sessions[todays.sessionId] : null;
   const session = adapted?.result.kind === "session" ? adapted.result.session : planned;
   const dateLine = today.toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long" });
+  const logged = loggedFor(stored, date, sessionId);
+  const active = stored.active;
+  const start = () => {
+    startWorkout(sessionId, date);
+    router.push(`/workout?s=${sessionId}`);
+  };
 
   return (
     <div className="screen">
@@ -41,6 +52,16 @@ export function TodayScreen() {
         <Image src="/brand/pressup-wordmark-on-dark.png" alt="PressUp" width={107} height={22} priority />
         <Badge>{plan.days.length} days a week</Badge>
       </header>
+
+      {active && active.sessionId !== sessionId ? (
+        <Link href={`/workout?s=${active.sessionId}`} className="checkin-cta">
+          <span>
+            <strong>{active.name} is in progress</strong>
+            <span className="muted">Started {new Date(active.startedAt).toLocaleDateString("en-GB", { weekday: "long" })}. Pick up where you left off.</span>
+          </span>
+          <Icon name="chevron-right" />
+        </Link>
+      ) : null}
 
       {adapted?.result.kind === "rest" ? (
         <>
@@ -60,6 +81,16 @@ export function TodayScreen() {
             <Button variant="ghost" block icon="adapt" onClick={() => setAdapting(true)}>Check in again</Button>
           )}
         </>
+      ) : session && logged ? (
+        <>
+          <section className="stack-2">
+            <p className="eyebrow">{dateLine} · Done</p>
+            <h1 className="h-display">{session.name}</h1>
+            <p className="muted">Logged. Every session counts.</p>
+          </section>
+          <DoneCard log={logged} />
+          <p className="muted">Next up is {nextSession.name} on {WEEKDAY_LONG[next.weekday]}.</p>
+        </>
       ) : session ? (
         <>
           <section className="stack-2">
@@ -71,9 +102,11 @@ export function TodayScreen() {
           <SessionStats session={session} />
 
           <div className="stack-3">
-            <ButtonLink href={`/workout?s=${sessionId}`} variant="primary" size="lg" block icon="play">
-              Start workout
-            </ButtonLink>
+            {active?.sessionId === sessionId ? (
+              <ButtonLink href={`/workout?s=${sessionId}`} variant="primary" size="lg" block icon="play">Resume workout</ButtonLink>
+            ) : (
+              <Button variant="primary" size="lg" block icon="play" onClick={start}>Start workout</Button>
+            )}
             <Button variant="secondary" size="lg" block icon="adapt" onClick={() => setAdapting(true)}>
               {adapted ? "Adapt again" : "Adapt my workout"}
             </Button>
@@ -97,9 +130,22 @@ export function TodayScreen() {
         </>
       )}
 
-      <WeekCard plan={plan} weekday={wd} />
+      <WeekCard stored={stored} today={today} />
       <AdaptSheet open={adapting} onClose={() => setAdapting(false)} stored={stored} sessionId={sessionId} date={date} restDay={!todays} />
     </div>
+  );
+}
+
+/** A finished session: the headline numbers, and a link to the whole workout. */
+function DoneCard({ log }: { log: WorkoutLog }) {
+  const sets = log.exercises.reduce((n, e) => n + doneSets(e).length, 0);
+  const effort = SESSION_EFFORT.find((o) => o.value === log.effort)?.label;
+  const parts = [log.timed ? `${log.timed.minutes} min` : `${sets} sets in ${durationMin(log)} min`, effort ? `felt ${effort.toLowerCase()}` : ""].filter(Boolean);
+  return (
+    <section className="card stack-3">
+      <p className="week-copy"><strong><Badge tone="done">Done</Badge></strong>{parts.join(" · ")}</p>
+      <ButtonLink href={`/workout?log=${log.id}`} variant="secondary" block>See the workout</ButtonLink>
+    </section>
   );
 }
 
@@ -165,27 +211,32 @@ function ExerciseList({ session, title }: { session: Session; title?: string }) 
   );
 }
 
-function WeekCard({ plan, weekday }: { plan: WeekPlan; weekday: number }) {
-  // Session logging arrives in milestone 5; until then the card shows where you are in the week.
+function WeekCard({ stored, today }: { stored: Stored; today: Date }) {
+  const { plan } = stored;
+  const weekday = weekdayOf(today);
+  // This week's dates, Monday first, and the days with a logged workout.
+  const dates = WEEKDAY_SHORT.map((_, i) => dateKey(new Date(today.getFullYear(), today.getMonth(), today.getDate() - weekday + i)));
+  const doneDays = new Set((stored.logs ?? []).filter((l) => dates.includes(l.date)).map((l) => l.date));
   const total = plan.days.length;
-  const passed = plan.days.filter((d) => d.weekday < weekday).length;
-  const left = total - passed;
+  const done = Math.min(total, doneDays.size);
+  const left = total - done;
   return (
     <section className="card week" aria-label="This week">
-      <ProgressRing value={passed / total} size={84} stroke={8} label="to go" ariaLabel={`${left} of ${total} planned sessions still to come this week`}>
-        <span className="pu-ring-value">{left}</span>
+      <ProgressRing value={done / total} size={84} stroke={8} label="done" ariaLabel={`${done} of ${total} sessions done this week`}>
+        <span className="pu-ring-value">{done}/{total}</span>
       </ProgressRing>
       <div className="stack-3" style={{ flex: 1, minWidth: 0 }}>
         <p className="week-copy">
-          <strong>{left === total ? "A fresh week" : left === 0 ? "That's the week" : `${left} session${left > 1 ? "s" : ""} to go`}</strong>
-          {left === 0 ? "A new training week starts on Monday." : "Consistency over perfection. Every session counts."}
+          <strong>{done === 0 ? "A fresh week" : left === 0 ? "That's the week done" : `${left} session${left > 1 ? "s" : ""} to go`}</strong>
+          {left === 0 ? "Nice work. A new training week starts on Monday." : "Consistency over perfection. Every session counts."}
         </p>
         <ol className="week-strip">
           {WEEKDAY_SHORT.map((d, i) => {
             const planned = plan.days.some((p) => p.weekday === i);
-            const state = !planned ? "rest" : i < weekday ? "done" : i === weekday ? "today" : "planned";
+            const state = doneDays.has(dates[i]) ? "done" : i === weekday ? "today" : !planned ? "rest" : i < weekday ? "open" : "planned";
+            const label = { done: "done", today: "today", rest: "rest", open: "not logged", planned: "planned" }[state];
             return (
-              <li key={d} className={`day day-${state}`} aria-label={`${d}: ${state === "rest" ? "rest" : state === "done" ? "earlier this week" : state}`}>
+              <li key={d} className={`day day-${state}`} aria-label={`${d}: ${label}`}>
                 <span className="day-dot" aria-hidden="true" />
                 {d.charAt(0)}
               </li>

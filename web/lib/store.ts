@@ -2,15 +2,25 @@
 
 /* The user's profile and plan, kept in this browser until accounts arrive in milestone 8. */
 import { useSyncExternalStore } from "react";
-import type { Adaptation, AdaptRequest } from "./engine/adapt";
+import { isLight, type Adaptation, type AdaptRequest } from "./engine/adapt";
 import { generatePlan } from "./engine/plan";
+import { startLog } from "./engine/progress";
 import type { Profile } from "./profile";
 import type { WeekPlan } from "./training";
+import type { WorkoutLog } from "./workout-log";
 
 /** Today's adapted session (or rest), from the check-in or ADAPT MY WORKOUT. It only counts on the day it was made. */
 export type DayAdaptation = { date: string; sessionId: string; label: string; request: AdaptRequest; result: Adaptation };
 
-export type Stored = { profile: Profile; plan: WeekPlan; today?: DayAdaptation };
+export type Stored = {
+  profile: Profile;
+  plan: WeekPlan;
+  today?: DayAdaptation;
+  /** Finished workouts, oldest first. */
+  logs?: WorkoutLog[];
+  /** The workout in progress, saved after every change so a reload or a phone call doesn't lose it. */
+  active?: WorkoutLog;
+};
 
 const KEY = "pressup.v1";
 const listeners = new Set<() => void>();
@@ -62,10 +72,12 @@ export function useStored(): Stored | null | "loading" {
   return useSyncExternalStore<Stored | null | "loading">(subscribe, read, () => "loading");
 }
 
-/** Save the profile and rebuild the plan from it. A rebuilt plan drops today's adaptation, which belonged to the old one. */
+/** Save the profile and rebuild the plan from it. A rebuilt plan drops today's adaptation, which belonged to the old one;
+    logged workouts and one in progress are kept. */
 export function saveProfile(profile: Profile): Stored {
   const now = new Date().toISOString();
-  const stored = { profile: { ...profile, updatedAt: now }, plan: generatePlan(profile, now) };
+  const { logs, active } = read() ?? {};
+  const stored: Stored = { profile: { ...profile, updatedAt: now }, plan: generatePlan(profile, now), logs, active };
   write(stored);
   return stored;
 }
@@ -103,12 +115,50 @@ export function saveAdaptation(today: DayAdaptation) {
 /** Go back to the planned session. */
 export function clearAdaptation() {
   const current = read();
-  if (current) write({ profile: current.profile, plan: current.plan });
+  if (current) write({ ...current, today: undefined });
 }
 
 /** Today's adaptation, if one was made today for this session. */
 export const adaptationFor = (stored: Stored, date: string, sessionId?: string) =>
   stored.today?.date === date && (!sessionId || stored.today.sessionId === sessionId) ? stored.today : null;
+
+/** Begin logging a session on a date: today's adapted version if there is one, otherwise the plan's.
+    Targets come from the logs so far. Starting another replaces any workout left in progress. */
+export function startWorkout(sessionId: string, date: string) {
+  const current = read();
+  if (!current) return;
+  const adapted = adaptationFor(current, date, sessionId);
+  const session = adapted?.result.kind === "session" ? adapted.result.session : current.plan.sessions[sessionId];
+  if (!session) return;
+  const log = startLog(session, sessionId, date, current.logs ?? [], current.profile.equipment, {
+    light: adapted ? isLight(adapted.request) : false, adaptedLabel: adapted?.label,
+  });
+  write({ ...current, active: log });
+}
+
+/** Save a change to the workout in progress. */
+export function updateWorkout(log: WorkoutLog) {
+  const current = read();
+  if (current?.active?.id === log.id) write({ ...current, active: log });
+}
+
+/** Finish the workout in progress and add it to the log. Returns the finished log. */
+export function finishWorkout(extra: Pick<WorkoutLog, "effort" | "notes">): WorkoutLog | null {
+  const current = read();
+  if (!current?.active) return null;
+  const done: WorkoutLog = { ...current.active, ...extra, finishedAt: new Date().toISOString() };
+  write({ ...current, active: undefined, logs: [...(current.logs ?? []), done] });
+  return done;
+}
+
+export function discardWorkout() {
+  const current = read();
+  if (current) write({ ...current, active: undefined });
+}
+
+/** The finished workout for a session on a date, if there is one. */
+export const loggedFor = (stored: Stored, date: string, sessionId?: string) =>
+  [...(stored.logs ?? [])].reverse().find((l) => l.date === date && (!sessionId || l.sessionId === sessionId)) ?? null;
 
 export function clearAll() {
   write(null);

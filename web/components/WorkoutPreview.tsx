@@ -3,24 +3,34 @@
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
-import { adaptationFor, clearAdaptation, useStored } from "@/lib/store";
+import { adaptationFor, clearAdaptation, loggedFor, startWorkout, useStored } from "@/lib/store";
 import { detail, estimateMinutes } from "@/lib/training";
 import { dateKey, useToday } from "@/lib/use-today";
 import { NeedsProfile } from "./NeedsProfile";
 import { SwapSheet } from "./SwapSheet";
-import { Badge, ExerciseCard, StatTile } from "./ui/primitives";
+import { Badge, Button, ExerciseCard, StatTile } from "./ui/primitives";
+import { WorkoutLogger } from "./WorkoutLogger";
+import { WorkoutSummary } from "./WorkoutSummary";
 import { Icon } from "./ui/Icon";
 
 const restLabel = (sec: number) => (sec >= 60 ? `rest ${Math.round(sec / 30) / 2} min` : `rest ${sec} s`);
 
+/** /workout: ?s=<session> previews a session, or logs it once started; ?log=<id> shows a finished workout. */
 export function WorkoutPreview() {
-  const id = useSearchParams().get("s");
+  const params = useSearchParams();
+  const id = params.get("s");
+  const logId = params.get("log");
   const stored = useStored();
   const router = useRouter();
   const today = useToday();
   const [swapIndex, setSwapIndex] = useState<number | null>(null);
   if (stored === "loading") return <div className="screen" aria-busy="true"><div className="skeleton" style={{ height: 420 }} /></div>;
   if (!stored) return <NeedsProfile title="Workout" />;
+  if (logId) {
+    const log = stored.logs?.find((l) => l.id === logId);
+    if (log) return <WorkoutSummary stored={stored} log={log} />;
+  }
+  if (stored.active && stored.active.sessionId === id) return <WorkoutLogger key={stored.active.id} log={stored.active} />;
   // Today's adapted version replaces the planned one. Swaps edit the plan, so they're offered on the planned version only.
   const adapted = id && today ? adaptationFor(stored, dateKey(today), id) : null;
   const session = adapted?.result.kind === "session" ? adapted.result.session : id ? stored.plan.sessions[id] : undefined;
@@ -44,11 +54,12 @@ export function WorkoutPreview() {
   }
 
   const timed = session.exercises.every((e) => e.durationMin);
+  const logged = today ? loggedFor(stored, dateKey(today), id!) : null;
   return (
     <div className="screen">
       <header className="top">
         {back}
-        <Badge>{adapted ? "Adapted" : "Milestone 5"}</Badge>
+        {adapted ? <Badge>Adapted</Badge> : null}
       </header>
       <section className="stack-2">
         <p className="eyebrow">{adapted ? adapted.label : "Workout"}</p>
@@ -65,10 +76,23 @@ export function WorkoutPreview() {
           <span>Adapted for today. <button type="button" className="text-link" onClick={clearAdaptation}>Back to the planned session</button></span>
         </p>
       ) : null}
-      <p className="note">
-        <Icon name="timer" size={18} />
-        Logging arrives in milestone 5: set-by-set weights and reps, a rest timer, how hard it felt, and next-session targets.
-      </p>
+      {logged ? (
+        <p className="note">
+          <Icon name="check" size={18} />
+          <span>Done today. <Link className="text-link" href={`/workout?log=${logged.id}`}>See the workout</Link></span>
+        </p>
+      ) : null}
+      {stored.active ? (
+        <p className="note">
+          <Icon name="timer" size={18} />
+          <span>{stored.active.name} is in progress. <Link className="text-link" href={`/workout?s=${stored.active.sessionId}`}>Resume it</Link>, or start this one instead.</span>
+        </p>
+      ) : null}
+      {today ? (
+        <Button variant="primary" size="lg" block icon="play" onClick={() => startWorkout(id!, dateKey(today))}>
+          {logged ? "Log it again" : "Start workout"}
+        </Button>
+      ) : null}
       <section className="stack-2" aria-label="Exercises">
         {session.exercises.map((e, i) => (
           <ExerciseCard key={e.exerciseId} index={i + 1} name={e.name}

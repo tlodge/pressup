@@ -184,3 +184,37 @@ button.text-link { background: none; border: 0; padding: 0; font: inherit; font-
 .why-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--space-2); }
 .why-list li { display: flex; gap: var(--space-2); align-items: flex-start; font-size: 14px; line-height: 20px; }
 .why-list svg { flex: none; margin-top: 2px; color: var(--accent); }
+
+/* Workout logging: the calm register. Big tabular numbers, 40px+ targets, yellow only for progress and the current set. */
+.logger { display: flex; flex-direction: column; gap: var(--space-5); padding-bottom: 300px; }
+.log-bar { display: flex; justify-content: space-between; align-items: center; }
+.log-clock { font-family: var(--font-condensed); font-weight: 700; font-size: 20px; letter-spacing: 0.06em; font-variant-numeric: tabular-nums; }
+.log-prog { height: 6px; border-radius: var(--radius-pill); background: var(--line); overflow: hidden; }
+.log-prog i { display: block; height: 100%; background: var(--accent-line); border-radius: var(--radius-pill); transition: width 300ms ease; }
+.eyebrow-accent { color: var(--accent); }
+.log-name { font-size: 24px; line-height: 30px; font-weight: 500; color: var(--ink); }
+.log-target { font-size: 16px; line-height: 22px; }
+.log-target strong { font-weight: 500; }
+.log-entry { display: flex; justify-content: center; gap: var(--space-2); flex-wrap: wrap; }
+.log-nav { display: flex; justify-content: space-between; }
+.set-row { cursor: pointer; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.effort-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-2); }
+.effort { display: flex; flex-direction: column; gap: 2px; align-items: flex-start; text-align: left; font: inherit; color: var(--ink); background: var(--surface-sunken); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: var(--space-3); cursor: pointer; min-height: 64px; }
+.effort strong { font-weight: 500; }
+.effort span { font-size: 13px; line-height: 18px; color: var(--ink-muted); }
+.effort[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--press-yellow); }
+.effort:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+.rest-panel { position: fixed; left: 50%; transform: translateX(-50%); bottom: 0; width: 100%; max-width: 480px; z-index: 25; background: var(--surface-raised); box-shadow: var(--shadow-float); border-radius: var(--radius-lg) var(--radius-lg) 0 0; padding: var(--space-4) var(--space-5) calc(var(--space-4) + env(safe-area-inset-bottom, 0px)); display: flex; flex-direction: column; gap: var(--space-2); }
+.text-area { width: 100%; font: inherit; color: var(--ink); background: var(--surface-sunken); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: var(--space-3); resize: vertical; }
+.text-area:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+.center-self { align-self: center; }
+.log-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--space-2); }
+.log-list li { display: flex; flex-direction: column; gap: 2px; background: var(--surface-raised); border-radius: var(--radius-sm); padding: var(--space-3) var(--space-4); }
+.log-list strong { font-weight: 500; }
+.log-next { display: flex; justify-content: space-between; gap: var(--space-2); align-items: baseline; }
+.trend { display: inline-flex; gap: 4px; align-items: center; font-family: var(--font-condensed); font-weight: 700; font-size: 17px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.trend-progress { color: var(--success); }
+.why-list .pu-badge { flex: none; }
+.pu-stepper button:disabled { opacity: 0.4; cursor: default; }
+.log-entry .pu-stepper-value { min-width: 64px; }
